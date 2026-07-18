@@ -1,0 +1,2183 @@
+{% extends "base.html" %}
+{% block title %}Salon {{ room_code }} — Intrigues & Couronne{% endblock %}
+{% block body %}
+<div class="table-jeu" id="app" data-room-code="{{ room_code }}">
+
+  <!-- ===================== EN-TÊTE ===================== -->
+  <header class="entete-royale">
+    <h1 class="titre-jeu">Intrigues <span class="amp">&amp;</span> Couronne</h1>
+    <div class="entete-info">
+      <span class="code-salon">{{ room_code }}</span>
+      <span id="info-cycle"></span>
+      <span id="timer-display" style="font-family:var(--font-mono); color:var(--or-clair);">⏳ --</span>
+    </div>
+    <div class="jauges-royaume" id="jauges-royaume" style="display:none;">
+      <div class="sceau-jauge">
+        <div class="sceau-cercle">
+          <svg width="46" height="46" viewBox="0 0 46 46">
+            <circle class="fond-piste" cx="23" cy="23" r="19" stroke-width="5"></circle>
+            <circle class="remplissage" id="anneau-stabilite" cx="23" cy="23" r="19" stroke-width="5" stroke="#557A5C"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="sceau-label">Stabilité</div>
+          <div class="sceau-valeur-grande" id="valeur-stabilite">—</div>
+        </div>
+      </div>
+      <div class="sceau-jauge">
+        <div class="sceau-cercle">
+          <svg width="46" height="46" viewBox="0 0 46 46">
+            <circle class="fond-piste" cx="23" cy="23" r="19" stroke-width="5"></circle>
+            <circle class="remplissage" id="anneau-or" cx="23" cy="23" r="19" stroke-width="5" stroke="#D4A84F"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="sceau-label">Caisses</div>
+          <div class="sceau-valeur-grande" id="valeur-or">—</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== LOBBY ===================== -->
+  <div class="corps-table" id="vue-lobby">
+    <div class="panneau" style="grid-column: 1 / -1; max-width:640px; margin:2rem auto;">
+      <div class="lobby-attente">
+        <h2>Salon en attente</h2>
+        <p class="texte-discret">Partagez ce code pour que vos rivaux vous rejoignent :</p>
+        <p style="font-family:var(--font-mono); font-size:2rem; letter-spacing:0.18em; color:var(--sceau); margin:0.4em 0;" id="code-affiche"></p>
+        <div class="lobby-joueurs-grille" id="lobby-joueurs"></div>
+        <p class="texte-discret" id="lobby-hint">Il faut au moins 3 joueurs (1 Roi + 2 ministres) pour commencer.</p>
+        <div id="zone-choix-roi" style="display:none; text-align:left; max-width:380px; margin:1.4rem auto 0;">
+          <p class="eyebrow">Désigner le Roi</p>
+          <div class="choix-roi-liste" id="choix-roi-liste"></div>
+        </div>
+        <div class="mt-2">
+          <button class="btn btn-primary" id="btn-lancer" style="display:none;">Lancer la partie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TABLE DE JEU ===================== -->
+  <div class="corps-table" id="vue-jeu" style="display:none;">
+    <div class="zone-principale" id="zone-principale">
+
+      <!-- Phase -->
+      <div class="panneau" id="panneau-phase">
+        <span class="ruban-cycle" id="ruban-cycle"></span>
+        <div id="contenu-phase"></div>
+      </div>
+
+      <!-- Dossiers -->
+      <div class="panneau" id="panneau-dossiers">
+        <div class="panneau-titre"><h2>📂 Dossiers Royaux</h2></div>
+        <div id="contenu-dossiers"></div>
+      </div>
+
+      <!-- Décrets -->
+      <div class="panneau" id="panneau-decrets">
+        <div class="panneau-titre"><h2>📜 Décrets</h2></div>
+        <div id="contenu-decrets"></div>
+      </div>
+
+      <!-- Cour -->
+      <div class="panneau" id="panneau-cour">
+        <div class="panneau-titre"><h2>👑 La Cour de Versailles</h2></div>
+        <div id="contenu-cour"></div>
+      </div>
+
+      <!-- Ministères -->
+      <div class="panneau">
+        <div class="panneau-titre"><h2>Les Ministères</h2></div>
+        <div class="grille-ministeres" id="grille-ministeres"></div>
+      </div>
+
+      <!-- Journal -->
+      <div class="panneau">
+        <div class="panneau-titre"><h2>Journal de la Cour</h2></div>
+        <div class="journal-royal" id="journal-royal"></div>
+      </div>
+    </div>
+
+    <div class="zone-laterale">
+      <!-- Joueurs -->
+      <div class="panneau">
+        <div class="panneau-titre"><h2>À la Table</h2></div>
+        <div class="liste-joueurs" id="liste-joueurs"></div>
+      </div>
+
+      <!-- Log personnel -->
+      <div class="panneau" style="max-height:150px; overflow-y:auto;">
+        <div class="panneau-titre"><h2>📖 Mon Journal</h2></div>
+        <div id="personal-log" style="font-size:0.85rem; color:var(--encre-douce);"></div>
+      </div>
+
+      <!-- Chat public -->
+      <div class="panneau chat-zone">
+        <div class="panneau-titre"><h2>Chambre du Conseil</h2></div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <form class="chat-formulaire" id="chat-formulaire">
+          <input type="text" id="chat-input" maxlength="500" placeholder="Murmurer un mot..." autocomplete="off">
+          <button class="btn btn-fantome" type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ÉCRAN DE FIN ===================== -->
+  <div class="corps-table" id="vue-fin" style="display:none;">
+    <div class="panneau" style="grid-column: 1 / -1; max-width:680px; margin:2rem auto;">
+      <div class="ecran-fin" id="ecran-fin"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== MODALES ===================== -->
+
+<!-- Falsification -->
+<div class="voile-modale cachee" id="modale-falsification">
+  <div class="boite-modale">
+    <h3>📜 Rapport de Crise</h3>
+    <p id="falsification-texte"></p>
+    <div id="falsification-reel" class="encart-info"></div>
+    <div id="falsification-edition" style="display:none; margin-top:1rem;">
+      <p class="eyebrow">Falsifier le rapport annoncé</p>
+      <div class="champ-groupe"><label>Stabilité annoncée</label><input type="number" id="input-stab-annonce"></div>
+      <div class="champ-groupe"><label>Or public annoncé</label><input type="number" id="input-or-annonce"></div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-vert" id="btn-confirmer-rapport">Transmettre fidèlement</button>
+      <button class="btn btn-primary" id="btn-falsifier-rapport" style="display:none;">Falsifier</button>
+    </div>
+  </div>
+</div>
+
+<!-- Succession -->
+<div class="voile-modale cachee" id="modale-succession">
+  <div class="boite-modale">
+    <h3 id="succession-titre"></h3>
+    <p class="texte-discret" id="succession-texte"></p>
+    <div class="choix-roi-liste" id="succession-liste"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-succession">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-succession" disabled>Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cible Pouvoir (pour Aumônier et Connétable) -->
+<div class="voile-modale cachee" id="modale-cible-pouvoir">
+  <div class="boite-modale">
+    <h3>⛪ Le Secret de la Confession</h3>
+    <p class="texte-discret" id="cible-pouvoir-texte">Désignez le ministre à cibler.</p>
+    <div class="choix-roi-liste" id="cible-pouvoir-liste"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-cible-pouvoir">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-cible-pouvoir" disabled>Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tribunal -->
+<div class="voile-modale cachee" id="modale-tribunal">
+  <div class="boite-modale">
+    <h3>⚖️ Tribunal Royal</h3>
+    <div id="tribunal-contenu">
+      <p id="tribunal-texte"></p>
+      <div id="tribunal-vote" style="display:none;">
+        <button class="btn btn-primary" id="tribunal-btn-coupable">Coupable</button>
+        <button class="btn btn-fantome" id="tribunal-btn-innocent">Innocent</button>
+      </div>
+      <div id="tribunal-sentence" style="display:none;"></div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-fermer-tribunal">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Proposer Décret -->
+<div class="voile-modale cachee" id="modale-proposer-decret">
+  <div class="boite-modale">
+    <h3>📜 Proposer un Décret</h3>
+    <div class="champ-groupe">
+      <label>Description</label>
+      <input type="text" id="decret-description" placeholder="Objet du décret...">
+    </div>
+    <div class="champ-groupe">
+      <label>Effets publics</label>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+        <div>
+          <label style="font-family:var(--font-mono); font-size:0.7rem;">Stabilité</label>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-stabilite', -1)" style="padding:0.2rem 0.6rem;">-</button>
+            <input type="number" id="decret-stabilite" value="0" style="width:60px; text-align:center;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-stabilite', 1)" style="padding:0.2rem 0.6rem;">+</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-family:var(--font-mono); font-size:0.7rem;">Or public</label>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-orpublic', -1)" style="padding:0.2rem 0.6rem;">-</button>
+            <input type="number" id="decret-orpublic" value="0" style="width:60px; text-align:center;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-orpublic', 1)" style="padding:0.2rem 0.6rem;">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="champ-groupe">
+      <label>Effet secret ciblé</label>
+      <select id="decret-secret-target" style="width:100%;">
+        <option value="">Aucun</option>
+      </select>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem;">
+        <div>
+          <label style="font-family:var(--font-mono); font-size:0.7rem;">Or perso</label>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-orperso', -1)" style="padding:0.2rem 0.6rem;">-</button>
+            <input type="number" id="decret-orperso" value="0" style="width:60px; text-align:center;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-orperso', 1)" style="padding:0.2rem 0.6rem;">+</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-family:var(--font-mono); font-size:0.7rem;">Influence</label>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-influence', -1)" style="padding:0.2rem 0.6rem;">-</button>
+            <input type="number" id="decret-influence" value="0" style="width:60px; text-align:center;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-influence', 1)" style="padding:0.2rem 0.6rem;">+</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-family:var(--font-mono); font-size:0.7rem;">Prestige</label>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-prestige', -1)" style="padding:0.2rem 0.6rem;">-</button>
+            <input type="number" id="decret-prestige" value="0" style="width:60px; text-align:center;">
+            <button class="btn btn-fantome" onclick="ajusterEffet('decret-prestige', 1)" style="padding:0.2rem 0.6rem;">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-decret">Annuler</button>
+      <button class="btn btn-primary" id="btn-proposer-decret">Proposer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lancer Dossier -->
+<div class="voile-modale cachee" id="modale-lancer-dossier">
+  <div class="boite-modale">
+    <h3>📂 Lancer un Dossier Royal</h3>
+    <p class="texte-discret">Choisissez un projet à lancer. Les ministres pourront y contribuer sur plusieurs tours.</p>
+    <div id="dossier-liste"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-dossier">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Contribuer Dossier -->
+<div class="voile-modale cachee" id="modale-contribuer-dossier">
+  <div class="boite-modale">
+    <h3>📂 Contribuer au Dossier</h3>
+    <p id="contribuer-dossier-nom"></p>
+    <div class="champ-groupe">
+      <label>Ressource</label>
+      <select id="contribuer-ressource">
+        <option value="or_personnel">Or personnel</option>
+        <option value="influence">Influence</option>
+        <option value="stabilite">Stabilité</option>
+      </select>
+    </div>
+    <div class="champ-groupe">
+      <label>Montant</label>
+      <div style="display:flex; align-items:center; gap:0.3rem;">
+        <button class="btn btn-fantome" onclick="ajusterMontant(-1)" style="padding:0.2rem 0.6rem;">-</button>
+        <input type="number" id="contribuer-montant" value="1" min="1" style="width:80px; text-align:center;">
+        <button class="btn btn-fantome" onclick="ajusterMontant(1)" style="padding:0.2rem 0.6rem;">+</button>
+      </div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-contribuer">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-contribuer">Contribuer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pot-de-Vin Institutionnel -->
+<div class="voile-modale cachee" id="modale-pot-de-vin">
+  <div class="boite-modale">
+    <h3>💰 Pot-de-Vin Institutionnel</h3>
+    <p class="texte-discret">Offrez un pot-de-vin secret à un ministre pour acheter son vote.</p>
+    <div class="champ-groupe">
+      <label>Cible</label>
+      <select id="pot-de-vin-cible"></select>
+    </div>
+    <div class="champ-groupe">
+      <label>Montant (Or personnel)</label>
+      <div style="display:flex; align-items:center; gap:0.3rem;">
+        <button class="btn btn-fantome" onclick="ajusterMontantPotDeVin(-5)" style="padding:0.2rem 0.6rem;">-5</button>
+        <button class="btn btn-fantome" onclick="ajusterMontantPotDeVin(-1)" style="padding:0.2rem 0.6rem;">-</button>
+        <input type="number" id="pot-de-vin-montant" value="5" min="1" style="width:80px; text-align:center;">
+        <button class="btn btn-fantome" onclick="ajusterMontantPotDeVin(1)" style="padding:0.2rem 0.6rem;">+</button>
+        <button class="btn btn-fantome" onclick="ajusterMontantPotDeVin(5)" style="padding:0.2rem 0.6rem;">+5</button>
+      </div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-pot-de-vin">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-pot-de-vin">Corrompre</button>
+    </div>
+  </div>
+</div>
+
+<!-- Arrestation Préventive -->
+<div class="voile-modale cachee" id="modale-arrestation">
+  <div class="boite-modale">
+    <h3>🛡️ Arrestation Préventive</h3>
+    <p class="texte-discret">Choisissez le ministre à placer en résidence surveillée.</p>
+    <div class="choix-roi-liste" id="arrestation-liste"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-arrestation">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-arrestation" disabled>Arrêter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Veto Populaire -->
+<div class="voile-modale cachee" id="modale-veto">
+  <div class="boite-modale">
+    <h3>🌾 Veto Populaire</h3>
+    <p class="texte-discret">Voulez-vous annuler le décret en cours au nom du peuple ?</p>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-veto">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-veto">✅ Annuler le décret</button>
+    </div>
+  </div>
+</div>
+
+<!-- Audience Royale -->
+<div class="voile-modale cachee" id="modale-audience">
+  <div class="boite-modale">
+    <h3>👑 Audience Royale Privée</h3>
+    <p class="texte-discret">Convoquez un ministre pour un entretien privé de 45 secondes.</p>
+    <div class="choix-roi-liste" id="audience-liste"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-audience">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-audience" disabled>Convoquer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Privé (Aumônier) -->
+<div class="voile-modale cachee" id="modale-chat-prive">
+  <div class="boite-modale">
+    <h3>⛪ Créer un Chat Privé</h3>
+    <div class="champ-groupe">
+      <label>Nom du chat</label>
+      <input type="text" id="chat-prive-nom" placeholder="Nom du complot...">
+    </div>
+    <div class="champ-groupe">
+      <label>Membres</label>
+      <div id="chat-prive-membres"></div>
+    </div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-fantome" id="btn-annuler-chat-prive">Annuler</button>
+      <button class="btn btn-primary" id="btn-confirmer-chat-prive">Créer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bilan de tour -->
+<div class="voile-modale cachee" id="bilan-tour">
+  <div class="boite-modale">
+    <h3>📊 Bilan du Cycle</h3>
+    <div id="bilan-contenu" class="bilan-tour"></div>
+    <div class="boite-modale-actions">
+      <button class="btn btn-primary" id="btn-fermer-bilan">Continuer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast-erreur"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+window.ROOM_CODE = "{{ room_code }}";
+window.ROLES_CATALOG = null;
+window.ROLES_CATALOG_READY = fetch('/api/roles')
+  .then(r => r.json())
+  .then(data => { window.ROLES_CATALOG = data; return data; });
+</script>
+
+<!-- ===================== JAVASCRIPT COMPLET ===================== -->
+<script>
+/* ==========================================================================
+   INTRIGUES & COURONNE — Client de jeu complet (version corrigée)
+   ========================================================================== */
+
+const ROOM_CODE = window.ROOM_CODE;
+const socket = io();
+
+let myPlayerUid = sessionStorage.getItem('player_uid_' + ROOM_CODE) || null;
+let myPseudo = sessionStorage.getItem('pseudo') || 'Joueur';
+let isHost = false;
+let lastState = null;
+let selectedKingUid = null;
+let successionContext = null;
+let contribuerContext = null;
+
+const PHASE_LABELS = {
+  lobby: 'En attente',
+  discussion: 'Négociation',
+  decision: 'Délibération secrète',
+  rapport: 'Rapport de Crise',
+  resolution: 'Cycle résolu',
+  terminee_victoire: 'Partie terminée',
+  terminee_ruine: 'Le Royaume s\'est effondré',
+  tribunal: 'Tribunal Royal'
+};
+
+// ============================================================================
+// CONNEXION SOCKET.IO
+// ============================================================================
+
+socket.on('connect', () => {
+  socket.emit('join_room_event', {
+    pseudo: myPseudo,
+    room_code: ROOM_CODE,
+    player_uid: myPlayerUid,
+  });
+});
+
+socket.on('room_joined', (data) => {
+  myPlayerUid = data.player_uid;
+  isHost = data.is_host;
+  sessionStorage.setItem('player_uid_' + ROOM_CODE, myPlayerUid);
+});
+
+socket.on('join_error', (data) => {
+  alert(data.message);
+  window.location.href = '/';
+});
+
+socket.on('action_error', (data) => {
+  afficherToast(data.message, 'error');
+});
+
+socket.on('timer_update', (data) => {
+  document.getElementById('timer-display').textContent = `⏳ ${data.seconds}s`;
+  if (data.seconds <= 0) {
+    document.getElementById('timer-display').textContent = '⏳ 0s';
+  }
+});
+
+socket.on('timer_finished', () => {
+  afficherToast("⏰ Le temps de négociation est écoulé ! Passage à la décision.", 'warning');
+  document.getElementById('timer-display').textContent = '⏳ 0s';
+});
+
+socket.on('personal_log', (data) => {
+  const container = document.getElementById('personal-log');
+  container.innerHTML = data.logs.map(msg => `<div>• ${msg}</div>`).join('');
+  container.scrollTop = container.scrollHeight;
+});
+
+socket.on('cycle_resolved', (summary) => {
+  fermerModaleFalsification();
+  afficherBilan(summary);
+});
+
+socket.on('state_update', (state) => {
+  lastState = state;
+  render(state);
+});
+
+socket.on('chat_message', (data) => {
+  ajouterMessageChat(data.pseudo, data.message, data.is_king);
+});
+
+socket.on('tribunal_vote_required', (data) => {
+  ouvrirModaleVoteTribunal(data.accuse_pseudo);
+});
+
+// ============================================================================
+// ÉVÉNEMENTS NOUVEAUX POUVOIRS
+// ============================================================================
+
+socket.on('chat_prive_cree', (data) => {
+  afficherToast(`⛪ Chat privé créé : ${data.nom}`, 'success');
+});
+
+socket.on('message_prive', (data) => {
+  afficherToast(`📩 Message privé de ${data.expediteur} dans "${data.chat_nom}" : ${data.message}`, 'info');
+});
+
+socket.on('audience_debute', (data) => {
+  afficherToast(`👑 Audience Royale : ${data.roi} convoque ${data.cible} (${data.duree}s)`, 'warning');
+  creerInterfaceAudience(data);
+});
+
+socket.on('audience_notification', (data) => {
+  afficherToast(`👑 ${data.roi} a convoqué ${data.cible} en Audience Royale !`, 'warning');
+});
+
+socket.on('audience_terminée', (data) => {
+  afficherToast(`👑 L'Audience Royale entre ${data.roi} et ${data.cible} est terminée.`, 'info');
+  supprimerInterfaceAudience();
+});
+
+socket.on('message_audience', (data) => {
+  ajouterMessageAudience(data.expediteur, data.message);
+});
+
+// ============================================================================
+// ÉVÉNEMENTS SPÉCIFIQUES À LA FALSIFICATION
+// ============================================================================
+
+socket.on('crisis_drawn', (data) => {
+  ouvrirModaleFalsification(data.card, data.can_falsify, data.options);
+});
+
+socket.on('crisis_attente', (data) => {
+  afficherToast(data.message, 'info');
+  const contenu = document.getElementById('contenu-phase');
+  if (contenu) {
+    contenu.innerHTML = `
+      <p class="texte-discret" style="text-align:center; padding:1rem;">
+        ⏳ Le Ministre de l'Intérieur prépare son rapport de crise...
+      </p>
+    `;
+  }
+});
+
+// ============================================================================
+// UTILITAIRES
+// ============================================================================
+
+function afficherToast(msg, type = 'error') {
+  const toast = document.getElementById('toast-erreur');
+  toast.textContent = msg;
+  toast.className = 'toast';
+  if (type === 'success') toast.classList.add('success');
+  else if (type === 'warning') toast.classList.add('warning');
+  toast.style.display = 'block';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+
+function ajusterEffet(id, delta) {
+  const input = document.getElementById(id);
+  if (input) {
+    let val = parseInt(input.value, 10) || 0;
+    val += delta;
+    input.value = val;
+  }
+}
+
+function ajusterMontant(delta) {
+  const input = document.getElementById('contribuer-montant');
+  if (input) {
+    let val = parseInt(input.value, 10) || 1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+  }
+}
+
+function ajusterMontantPotDeVin(delta) {
+  const input = document.getElementById('pot-de-vin-montant');
+  if (input) {
+    let val = parseInt(input.value, 10) || 1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+  }
+}
+
+// ============================================================================
+// INTERFACE AUDIENCE
+// ============================================================================
+
+function creerInterfaceAudience(data) {
+  const container = document.getElementById('zone-principale');
+  supprimerInterfaceAudience();
+
+  const chatDiv = document.createElement('div');
+  chatDiv.id = 'chat-audience';
+  chatDiv.className = 'panneau';
+  chatDiv.innerHTML = `
+    <div class="panneau-titre"><h2>👑 Audience Royale</h2></div>
+    <div style="font-size:0.85rem; color:var(--or); margin-bottom:0.5rem;">
+      ${data.roi} ↔ ${data.cible} (${data.duree}s)
+    </div>
+    <div id="audience-messages" style="height:150px; overflow-y:auto; border:1px solid var(--or); padding:0.5rem; border-radius:var(--radius);"></div>
+    <form id="audience-form" style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+      <input type="text" id="audience-input" placeholder="Message privé..." style="flex:1;">
+      <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+  `;
+  container.prepend(chatDiv);
+
+  const form = document.getElementById('audience-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = document.getElementById('audience-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+      socket.emit('envoyer_audience', { message: msg });
+      input.value = '';
+    });
+  }
+}
+
+function supprimerInterfaceAudience() {
+  const chat = document.getElementById('chat-audience');
+  if (chat) chat.remove();
+}
+
+function ajouterMessageAudience(expediteur, message) {
+  const container = document.getElementById('audience-messages');
+  if (container) {
+    const div = document.createElement('div');
+    div.style.padding = '0.2rem 0';
+    div.style.borderBottom = '1px solid rgba(184,134,46,0.2)';
+    div.innerHTML = `<strong style="color:var(--or);">${expediteur}</strong> : ${message}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+// ============================================================================
+// RENDU PRINCIPAL
+// ============================================================================
+
+function render(state) {
+  const vueLobby = document.getElementById('vue-lobby');
+  const vueJeu = document.getElementById('vue-jeu');
+  const vueFin = document.getElementById('vue-fin');
+  const jauges = document.getElementById('jauges-royaume');
+
+  if (state.phase === 'lobby') {
+    vueLobby.style.display = '';
+    vueJeu.style.display = 'none';
+    vueFin.style.display = 'none';
+    jauges.style.display = 'none';
+    renderLobby(state);
+    return;
+  }
+
+  if (state.phase === 'terminee_victoire' || state.phase === 'terminee_ruine') {
+    vueLobby.style.display = 'none';
+    vueJeu.style.display = '';
+    vueFin.style.display = '';
+    jauges.style.display = '';
+    renderJauges(state);
+    renderMinisteres(state);
+    renderJoueurs(state);
+    renderJournal(state);
+    renderFin(state);
+    document.getElementById('panneau-phase').style.display = 'none';
+    document.getElementById('panneau-cour').style.display = 'none';
+    document.getElementById('panneau-dossiers').style.display = 'none';
+    document.getElementById('panneau-decrets').style.display = 'none';
+    return;
+  }
+
+  vueLobby.style.display = 'none';
+  vueJeu.style.display = '';
+  vueFin.style.display = 'none';
+  jauges.style.display = '';
+
+  document.getElementById('panneau-phase').style.display = '';
+  document.getElementById('panneau-cour').style.display = '';
+  document.getElementById('panneau-dossiers').style.display = '';
+  document.getElementById('panneau-decrets').style.display = '';
+
+  document.getElementById('info-cycle').textContent =
+    state.phase !== 'lobby' ? `Cycle ${state.cycle} / ${(window.ROLES_CATALOG && window.ROLES_CATALOG.nb_cycles) || 8}` : '';
+
+  renderJauges(state);
+  renderPhase(state);
+  renderCour(state);
+  renderMinisteres(state);
+  renderJoueurs(state);
+  renderJournal(state);
+  renderDossiers(state);
+  renderDecrets(state);
+}
+
+// ============================================================================
+// Jauges
+// ============================================================================
+
+function renderJauges(state) {
+  const R = 19;
+  const C = 2 * Math.PI * R;
+
+  const stab = Math.max(0, Math.min(100, state.stabilite));
+  const anneauStab = document.getElementById('anneau-stabilite');
+  anneauStab.setAttribute('stroke-dasharray', C);
+  anneauStab.setAttribute('stroke-dashoffset', C * (1 - stab / 100));
+  anneauStab.setAttribute('stroke', stab <= 20 ? '#9C2E3C' : (stab <= 45 ? '#D4A84F' : '#557A5C'));
+  document.getElementById('valeur-stabilite').textContent = state.stabilite;
+
+  const orRatio = Math.max(0, Math.min(1, state.or_public / 150));
+  const anneauOr = document.getElementById('anneau-or');
+  anneauOr.setAttribute('stroke-dasharray', C);
+  anneauOr.setAttribute('stroke-dashoffset', C * (1 - orRatio));
+  anneauOr.setAttribute('stroke', state.or_public < 0 ? '#9C2E3C' : '#D4A84F');
+  document.getElementById('valeur-or').textContent = state.or_public;
+}
+
+// ============================================================================
+// Lobby
+// ============================================================================
+
+function renderLobby(state) {
+  document.getElementById('code-affiche').textContent = state.room_code;
+  isHost = (state.host_uid === myPlayerUid);
+
+  const grille = document.getElementById('lobby-joueurs');
+  grille.innerHTML = '';
+  Object.values(state.players).forEach(p => {
+    const jeton = document.createElement('div');
+    jeton.className = 'jeton-joueur' + (p.player_uid === myPlayerUid ? ' cest-moi' : '');
+    jeton.textContent = p.pseudo + (state.host_uid === p.player_uid ? ' 🗝️' : '');
+    grille.appendChild(jeton);
+  });
+
+  const nbJoueurs = Object.keys(state.players).length;
+  const btnLancer = document.getElementById('btn-lancer');
+  const zoneChoixRoi = document.getElementById('zone-choix-roi');
+  const hint = document.getElementById('lobby-hint');
+
+  if (isHost) {
+    hint.textContent = nbJoueurs < 3 ? `En attente de joueurs (${nbJoueurs}/3 minimum)...` : 'Désignez le Roi et lancez la partie.';
+    if (nbJoueurs >= 3) {
+      zoneChoixRoi.style.display = '';
+      renderChoixRoi(state);
+      btnLancer.style.display = '';
+      btnLancer.disabled = !selectedKingUid;
+    } else {
+      zoneChoixRoi.style.display = 'none';
+      btnLancer.style.display = 'none';
+    }
+  } else {
+    hint.textContent = nbJoueurs < 3 ? `En attente de joueurs (${nbJoueurs}/3 minimum)...` : 'En attente que l\'hôte lance la partie.';
+    zoneChoixRoi.style.display = 'none';
+    btnLancer.style.display = 'none';
+  }
+}
+
+function renderChoixRoi(state) {
+  const liste = document.getElementById('choix-roi-liste');
+  liste.innerHTML = '';
+  if (selectedKingUid === null) selectedKingUid = state.host_uid;
+
+  Object.values(state.players).forEach(p => {
+    const option = document.createElement('label');
+    option.className = 'choix-roi-option' + (selectedKingUid === p.player_uid ? ' selectionne' : '');
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'roi-choix';
+    radio.value = p.player_uid;
+    radio.checked = selectedKingUid === p.player_uid;
+    radio.addEventListener('change', () => {
+      selectedKingUid = p.player_uid;
+      renderChoixRoi(state);
+      document.getElementById('btn-lancer').disabled = false;
+    });
+    const texte = document.createElement('span');
+    texte.textContent = '👑 ' + p.pseudo;
+    option.appendChild(radio);
+    option.appendChild(texte);
+    liste.appendChild(option);
+  });
+}
+
+document.getElementById('btn-lancer').addEventListener('click', () => {
+  socket.emit('start_game', { king_uid: selectedKingUid });
+});
+
+// ============================================================================
+// Phase
+// ============================================================================
+
+function renderPhase(state) {
+  const ruban = document.getElementById('ruban-cycle');
+  const contenu = document.getElementById('contenu-phase');
+  ruban.className = 'ruban-cycle phase-' + state.phase;
+  ruban.textContent = PHASE_LABELS[state.phase] || state.phase;
+
+  contenu.innerHTML = '';
+
+  const me = state.players[myPlayerUid];
+  const monRoleIds = me ? (me.role_ids || []) : [];
+
+  if (state.phase === 'discussion') {
+    const p = document.createElement('p');
+    p.className = 'texte-discret';
+    p.textContent = 'Négociez, complotez, préparez vos décisions. Vous avez un temps limité.';
+    contenu.appendChild(p);
+
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display = 'flex';
+    btnContainer.style.flexWrap = 'wrap';
+    btnContainer.style.gap = '0.6rem';
+    btnContainer.style.marginTop = '0.8rem';
+
+    if (me && me.is_king) {
+      const btnTribunal = document.createElement('button');
+      btnTribunal.className = 'btn btn-primary';
+      btnTribunal.textContent = '⚖️ Convoquer un tribunal (coût 10 Stabilité)';
+      btnTribunal.addEventListener('click', () => ouvrirModaleTribunal(state));
+      btnContainer.appendChild(btnTribunal);
+
+      const btnDossier = document.createElement('button');
+      btnDossier.className = 'btn btn-or';
+      btnDossier.textContent = '📂 Lancer un Dossier Royal';
+      btnDossier.addEventListener('click', () => ouvrirModaleDossier());
+      btnContainer.appendChild(btnDossier);
+
+      const btnAudience = document.createElement('button');
+      btnAudience.className = 'btn btn-vert';
+      btnAudience.textContent = '👑 Audience Royale';
+      btnAudience.addEventListener('click', () => ouvrirModaleAudience(state));
+      btnContainer.appendChild(btnAudience);
+    }
+
+    if (me && !me.is_king && monRoleIds.length) {
+      const btnDecret = document.createElement('button');
+      btnDecret.className = 'btn btn-vert';
+      btnDecret.textContent = '📜 Proposer un décret';
+      btnDecret.addEventListener('click', () => ouvrirModaleDecret(state));
+      btnContainer.appendChild(btnDecret);
+    }
+
+    contenu.appendChild(btnContainer);
+
+  } else if (state.phase === 'decision') {
+    const p = document.createElement('p');
+    p.className = 'texte-discret';
+    p.textContent = monRoleIds.length ? 'Choisissez le niveau d\'ouverture de vos robinets (0 = fermé, 3 = surchauffe).' : 'Vous n\'avez pas de portefeuille.';
+    contenu.appendChild(p);
+
+    if (monRoleIds.length) {
+      monRoleIds.forEach(roleId => {
+        contenu.appendChild(construireBlocDecisionSlider(roleId, state));
+      });
+    }
+
+    const compteur = document.createElement('p');
+    compteur.className = 'statut-vote';
+    const nbVotes = Object.keys(state.decisions || {}).length;
+    compteur.textContent = `${nbVotes} / ${state.active_role_ids.length} ministères ont arrêté leur décision.`;
+    contenu.appendChild(compteur);
+  } else if (state.phase === 'rapport') {
+    const p = document.createElement('p');
+    p.className = 'texte-discret';
+    const isInterieur = monRoleIds.includes('interieur');
+    p.textContent = isInterieur ? 'Transmettez — ou falsifiez — le rapport de crise.' : 'Le Ministre de l\'Intérieur compose son rapport...';
+    contenu.appendChild(p);
+  } else if (state.phase === 'resolution') {
+    const p = document.createElement('p');
+    p.className = 'texte-discret';
+    p.textContent = 'Le cycle a été résolu. Passez au cycle suivant.';
+    contenu.appendChild(p);
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary mt-1';
+    btn.textContent = 'Passer au cycle suivant →';
+    btn.addEventListener('click', () => socket.emit('next_cycle', {}));
+    contenu.appendChild(btn);
+  } else if (state.phase === 'tribunal') {
+    const p = document.createElement('p');
+    p.className = 'texte-discret';
+    p.textContent = '⚖️ Le tribunal est en session. Consultez la modale.';
+    contenu.appendChild(p);
+  }
+}
+
+function construireBlocDecisionSlider(roleId, state) {
+  const cat = window.ROLES_CATALOG;
+  const roleDef = cat ? cat.roles[roleId] : null;
+  const dejaVote = !!(state.decisions && state.decisions[roleId]);
+
+  const wrap = document.createElement('div');
+  wrap.style.marginBottom = '1.2rem';
+  wrap.style.padding = '0.5rem';
+  wrap.style.border = '1px solid var(--parchemin-ombre)';
+  wrap.style.borderRadius = 'var(--radius)';
+
+  const titre = document.createElement('p');
+  titre.innerHTML = `<strong>${roleDef ? roleDef.icon + ' ' + roleDef.name : roleId}</strong>`;
+  wrap.appendChild(titre);
+
+  if (!dejaVote) {
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 0;
+    slider.max = 3;
+    slider.step = 1;
+    slider.value = 2;
+    slider.className = 'robinet-slider';
+    wrap.appendChild(slider);
+
+    const feedback = document.createElement('div');
+    feedback.className = 'slider-feedback';
+    feedback.textContent = roleDef ? roleDef.niveau_desc[2] : 'Normal';
+    wrap.appendChild(feedback);
+
+    const labelsDiv = document.createElement('div');
+    labelsDiv.className = 'slider-labels';
+    const niveaux = roleDef ? roleDef.niveau_desc : ['Fermé', 'Restreint', 'Normal', 'Surchauffe'];
+    niveaux.forEach((label, idx) => {
+      const span = document.createElement('span');
+      span.textContent = label.split(':')[0] || label;
+      if (idx === 2) span.classList.add('active');
+      labelsDiv.appendChild(span);
+    });
+    wrap.appendChild(labelsDiv);
+
+    slider.addEventListener('input', () => {
+      const val = parseInt(slider.value, 10);
+      const labels = labelsDiv.querySelectorAll('span');
+      labels.forEach((span, idx) => {
+        span.classList.toggle('active', idx === val);
+      });
+      feedback.textContent = roleDef ? roleDef.niveau_desc[val] : niveaux[val];
+    });
+
+    const btnValider = document.createElement('button');
+    btnValider.className = 'btn btn-primary mt-1';
+    btnValider.textContent = 'Confirmer ce niveau';
+    btnValider.addEventListener('click', () => {
+      const niveau = parseInt(slider.value, 10);
+      socket.emit('submit_decision', { role_id: roleId, niveau: niveau });
+    });
+    wrap.appendChild(btnValider);
+  } else {
+    const statut = document.createElement('p');
+    statut.className = 'statut-vote a-vote';
+    statut.textContent = '✓ Décision enregistrée.';
+    wrap.appendChild(statut);
+  }
+
+  return wrap;
+}
+
+// ============================================================================
+// COUR — TOUS LES POUVOIRS
+// ============================================================================
+
+function renderCour(state) {
+  const cat = window.ROLES_CATALOG;
+  const contenu = document.getElementById('contenu-cour');
+  contenu.innerHTML = '';
+  if (!cat) return;
+
+  const me = state.players[myPlayerUid];
+  const monRoleIds = me ? (me.role_ids || []) : [];
+  const enJeu = state.phase === 'discussion' || state.phase === 'decision';
+
+  const revoc = document.createElement('p');
+  revoc.className = 'texte-discret';
+  revoc.innerHTML = `👑 Droit de révocation : <strong>${state.revocations_restantes}</strong> restant(s)`;
+  contenu.appendChild(revoc);
+
+  monRoleIds.forEach(roleId => {
+    const roleDef = cat.roles[roleId];
+    if (!roleDef || !roleDef.pouvoir_nom) return;
+    const dejaUtilise = (state.pouvoirs_utilises || []).includes(roleId);
+
+    const bloc = document.createElement('div');
+    bloc.className = 'encart-info';
+    bloc.style.margin = '0.8em 0';
+    bloc.innerHTML = `<strong>${roleDef.icon} ${roleDef.pouvoir_nom}</strong><br>
+      <span class="texte-discret" style="font-size:0.85rem;">${roleDef.pouvoir_desc}</span>`;
+
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-or mt-1';
+    btn.style.fontSize = '0.82rem';
+    btn.textContent = dejaUtilise ? '✓ Déjà utilisé' : `Invoquer : ${roleDef.pouvoir_nom}`;
+    btn.disabled = dejaUtilise || !enJeu;
+    
+    btn.addEventListener('click', () => {
+      if (roleId === 'finances') {
+        ouvrirModalePotDeVin(state);
+      } else if (roleId === 'connetable') {
+        ouvrirModaleArrestation(state);
+      } else if (roleId === 'subsistances') {
+        if (!state.decrets_actifs || state.decrets_actifs.length === 0) {
+          afficherToast('Aucun décret en cours à annuler.', 'error');
+          return;
+        }
+        ouvrirModaleVeto();
+      } else if (roleId === 'aumonier') {
+        ouvrirModaleChatPrive(state);
+      } else if (roleId === 'interieur') {
+        afficherToast('La Falsification se fait automatiquement lors du rapport de crise.', 'info');
+      } else {
+        socket.emit('use_pouvoir', { role_id: roleId });
+      }
+    });
+    
+    bloc.appendChild(document.createElement('br'));
+    bloc.appendChild(btn);
+    contenu.appendChild(bloc);
+  });
+
+  // Entreprises (Roi)
+  if (me && me.is_king) {
+    const presents = new Set();
+    Object.values(state.players).forEach(p => (p.role_ids || []).forEach(r => presents.add(r)));
+
+    if (state.entreprise_active) {
+      const entDef = (cat.entreprises || []).find(e => e.id === state.entreprise_active.id);
+      const bloc = document.createElement('div');
+      bloc.className = 'encart-avertissement';
+      bloc.style.margin = '0.8em 0';
+      const statuts = (entDef ? entDef.roles_requis : []).map(r =>
+        `${cat.roles[r].icon} ${cat.roles[r].name} : ${state.entreprise_active.investissements[r] ? '✅ investi' : '⏳ en attente'}`
+      ).join('<br>');
+      bloc.innerHTML = `<strong>🏰 Entreprise en cours : ${entDef ? entDef.nom : ''}</strong><br>${statuts}`;
+      contenu.appendChild(bloc);
+    } else if (enJeu) {
+      const dispo = (cat.entreprises || []).filter(e =>
+        !(state.entreprises_utilisees || []).includes(e.id) &&
+        e.roles_requis.every(r => presents.has(r))
+      );
+      if (dispo.length) {
+        const eyebrow = document.createElement('p');
+        eyebrow.className = 'eyebrow';
+        eyebrow.textContent = 'Ordonner une Grande Entreprise';
+        contenu.appendChild(eyebrow);
+        const wrap = document.createElement('div');
+        wrap.style.display = 'flex';
+        wrap.style.flexWrap = 'wrap';
+        wrap.style.gap = '0.4rem';
+        dispo.forEach(e => {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-fantome';
+          btn.style.fontSize = '0.78rem';
+          btn.textContent = `⚜️ ${e.nom}`;
+          btn.addEventListener('click', () => socket.emit('launch_enterprise', { entreprise_id: e.id }));
+          wrap.appendChild(btn);
+        });
+        contenu.appendChild(wrap);
+      }
+    }
+
+    if (state.entreprise_active) {
+      const entDef = (cat.entreprises || []).find(e => e.id === state.entreprise_active.id);
+      if (entDef) {
+        const monRoleRequis = entDef.roles_requis.find(r => monRoleIds.includes(r));
+        if (monRoleRequis && !state.entreprise_active.investissements[monRoleRequis]) {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-vert mt-1';
+          btn.style.fontSize = '0.82rem';
+          btn.textContent = `S'investir (coûte ${entDef.cout_investissement} Or)`;
+          btn.addEventListener('click', () => socket.emit('investir_entreprise', { role_id: monRoleRequis }));
+          contenu.appendChild(btn);
+        }
+      }
+    }
+  }
+
+  // Tâche active
+  if (state.tache_active) {
+    const t = state.tache_active;
+    const roleDefOwner = cat.roles[t.role_id];
+    const bloc = document.createElement('div');
+    bloc.className = 'encart-avertissement';
+    bloc.style.margin = '0.8em 0';
+    let statut = t.accomplie ? '✅ Accomplie' : (t.aide_obtenue ? '⏳ Prête' : '⏳ Aide requise');
+    bloc.innerHTML = `<strong>❗ Mission Urgente — ${roleDefOwner.icon} ${roleDefOwner.name}</strong><br>
+      <span class="texte-discret">${t.titre} — ${t.description}</span><br>
+      <span class="statut-vote">${statut}</span>`;
+
+    if (t.role_aide && !t.aide_obtenue && monRoleIds.includes(t.role_aide)) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-vert mt-1';
+      btn.style.fontSize = '0.82rem';
+      btn.textContent = `🤝 Apporter l'aide (coûte ${t.cout_aide} Or)`;
+      btn.addEventListener('click', () => socket.emit('aider_tache', {}));
+      bloc.appendChild(document.createElement('br'));
+      bloc.appendChild(btn);
+    }
+    if (t.aide_obtenue && !t.accomplie && monRoleIds.includes(t.role_id)) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-primary mt-1';
+      btn.style.fontSize = '0.82rem';
+      btn.textContent = '🎯 Accomplir la mission';
+      btn.addEventListener('click', () => socket.emit('accomplir_tache', {}));
+      bloc.appendChild(document.createElement('br'));
+      bloc.appendChild(btn);
+    }
+    contenu.appendChild(bloc);
+  }
+}
+
+// ============================================================================
+// NOUVELLES MODALES
+// ============================================================================
+
+// ---- Pot-de-Vin Institutionnel ----
+function ouvrirModalePotDeVin(state) {
+  const modale = document.getElementById('modale-pot-de-vin');
+  const select = document.getElementById('pot-de-vin-cible');
+  select.innerHTML = '';
+  
+  if (!state.decrets_actifs || state.decrets_actifs.length === 0) {
+    afficherToast('Aucun décret en cours à corrompre.', 'error');
+    return;
+  }
+  
+  const decret = state.decrets_actifs[0];
+  
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
+      const option = document.createElement('option');
+      option.value = uid;
+      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon).join('');
+      option.textContent = `${roles} ${p.pseudo}`;
+      select.appendChild(option);
+    }
+  }
+  
+  document.getElementById('pot-de-vin-montant').value = 5;
+  modale.classList.remove('cachee');
+  window._potDeVinContext = { decret_id: decret.id };
+}
+
+// Réinitialisation des écouteurs pour éviter les doublons
+document.getElementById('btn-annuler-pot-de-vin').replaceWith(document.getElementById('btn-annuler-pot-de-vin').cloneNode(true));
+document.getElementById('btn-confirmer-pot-de-vin').replaceWith(document.getElementById('btn-confirmer-pot-de-vin').cloneNode(true));
+
+document.getElementById('btn-annuler-pot-de-vin').addEventListener('click', function() {
+  document.getElementById('modale-pot-de-vin').classList.add('cachee');
+  window._potDeVinContext = null;
+});
+
+document.getElementById('btn-confirmer-pot-de-vin').addEventListener('click', function() {
+  if (!window._potDeVinContext) return;
+  const cible = document.getElementById('pot-de-vin-cible').value;
+  const montant = parseInt(document.getElementById('pot-de-vin-montant').value, 10);
+  if (!cible || montant <= 0) {
+    afficherToast('Cible ou montant invalide.', 'error');
+    return;
+  }
+  socket.emit('use_pouvoir', {
+    role_id: 'finances',
+    target_role_id: cible,
+    decret_id: window._potDeVinContext.decret_id,
+    montant: montant
+  });
+  document.getElementById('modale-pot-de-vin').classList.add('cachee');
+  window._potDeVinContext = null;
+});
+
+// ---- Arrestation Préventive ----
+function ouvrirModaleArrestation(state) {
+  const modale = document.getElementById('modale-arrestation');
+  const liste = document.getElementById('arrestation-liste');
+  const btnConfirmer = document.getElementById('btn-confirmer-arrestation');
+  liste.innerHTML = '';
+  let choixCourant = null;
+
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
+      const option = document.createElement('label');
+      option.className = 'choix-roi-option';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'arrestation-choix';
+      radio.value = uid;
+      radio.addEventListener('change', () => {
+        choixCourant = uid;
+        document.querySelectorAll('#arrestation-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
+        option.classList.add('selectionne');
+        btnConfirmer.disabled = false;
+      });
+      const texte = document.createElement('span');
+      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon + ' ' + window.ROLES_CATALOG.roles[r].name).join(', ');
+      texte.textContent = `${p.pseudo} (${roles})`;
+      option.appendChild(radio);
+      option.appendChild(texte);
+      liste.appendChild(option);
+    }
+  }
+
+  btnConfirmer.disabled = true;
+  btnConfirmer.onclick = () => {
+    if (!choixCourant) return;
+    socket.emit('use_pouvoir', { role_id: 'connetable', target_role_id: choixCourant });
+    modale.classList.add('cachee');
+  };
+
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-arrestation').addEventListener('click', function() {
+  document.getElementById('modale-arrestation').classList.add('cachee');
+});
+
+// ---- Veto Populaire ----
+function ouvrirModaleVeto() {
+  document.getElementById('modale-veto').classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-veto').addEventListener('click', function() {
+  document.getElementById('modale-veto').classList.add('cachee');
+});
+
+document.getElementById('btn-confirmer-veto').addEventListener('click', function() {
+  socket.emit('use_pouvoir', { role_id: 'subsistances' });
+  document.getElementById('modale-veto').classList.add('cachee');
+});
+
+// ---- Audience Royale ----
+function ouvrirModaleAudience(state) {
+  const modale = document.getElementById('modale-audience');
+  const liste = document.getElementById('audience-liste');
+  const btnConfirmer = document.getElementById('btn-confirmer-audience');
+  liste.innerHTML = '';
+  let choixCourant = null;
+
+  const me = state.players[myPlayerUid];
+  if (!me || !me.is_king) return;
+
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
+      const option = document.createElement('label');
+      option.className = 'choix-roi-option';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'audience-choix';
+      radio.value = uid;
+      radio.addEventListener('change', () => {
+        choixCourant = uid;
+        document.querySelectorAll('#audience-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
+        option.classList.add('selectionne');
+        btnConfirmer.disabled = false;
+      });
+      const texte = document.createElement('span');
+      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon + ' ' + window.ROLES_CATALOG.roles[r].name).join(', ');
+      texte.textContent = `${p.pseudo} (${roles})`;
+      option.appendChild(radio);
+      option.appendChild(texte);
+      liste.appendChild(option);
+    }
+  }
+
+  btnConfirmer.disabled = true;
+  btnConfirmer.onclick = () => {
+    if (!choixCourant) return;
+    socket.emit('convoquer_audience', { cible_uid: choixCourant });
+    modale.classList.add('cachee');
+  };
+
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-audience').addEventListener('click', function() {
+  document.getElementById('modale-audience').classList.add('cachee');
+});
+
+// ---- Chat Privé (Aumônier) ----
+function ouvrirModaleChatPrive(state) {
+  const modale = document.getElementById('modale-chat-prive');
+  const container = document.getElementById('chat-prive-membres');
+  container.innerHTML = '';
+  
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
+      const label = document.createElement('label');
+      label.style.display = 'block';
+      label.style.margin = '0.2rem 0';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = uid;
+      checkbox.style.marginRight = '0.5rem';
+      label.appendChild(checkbox);
+      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon).join('');
+      label.appendChild(document.createTextNode(`${roles} ${p.pseudo}`));
+      container.appendChild(label);
+    }
+  }
+  
+  document.getElementById('chat-prive-nom').value = '';
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-chat-prive').addEventListener('click', function() {
+  document.getElementById('modale-chat-prive').classList.add('cachee');
+});
+
+document.getElementById('btn-confirmer-chat-prive').addEventListener('click', function() {
+  const nom = document.getElementById('chat-prive-nom').value.trim();
+  if (!nom) {
+    afficherToast('Donnez un nom au chat.', 'error');
+    return;
+  }
+  const checkboxes = document.querySelectorAll('#chat-prive-membres input[type="checkbox"]:checked');
+  const membres = Array.from(checkboxes).map(cb => cb.value);
+  if (membres.length < 1) {
+    afficherToast('Choisissez au moins un membre.', 'error');
+    return;
+  }
+  socket.emit('creer_chat_prive', { nom: nom, membres: membres });
+  document.getElementById('modale-chat-prive').classList.add('cachee');
+});
+
+// ---- Cible Pouvoir (pour Aumônier et Connétable) ----
+function ouvrirModaleCiblePouvoir(state, roleId) {
+  const modale = document.getElementById('modale-cible-pouvoir');
+  const liste = document.getElementById('cible-pouvoir-liste');
+  const btnConfirmer = document.getElementById('btn-confirmer-cible-pouvoir');
+  const texte = document.getElementById('cible-pouvoir-texte');
+  
+  if (roleId === 'aumonier') {
+    texte.textContent = 'Désignez le ministre dont vous voulez percer les secrets.';
+  } else if (roleId === 'connetable') {
+    texte.textContent = 'Désignez le ministre à placer en arrestation préventive.';
+  }
+  
+  liste.innerHTML = '';
+  let choixCourant = null;
+
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
+      const option = document.createElement('label');
+      option.className = 'choix-roi-option';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'cible-pouvoir-choix';
+      radio.value = uid;
+      radio.addEventListener('change', () => {
+        choixCourant = uid;
+        document.querySelectorAll('#cible-pouvoir-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
+        option.classList.add('selectionne');
+        btnConfirmer.disabled = false;
+      });
+      const texteOpt = document.createElement('span');
+      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon + ' ' + window.ROLES_CATALOG.roles[r].name).join(', ');
+      texteOpt.textContent = `${p.pseudo} (${roles})`;
+      option.appendChild(radio);
+      option.appendChild(texteOpt);
+      liste.appendChild(option);
+    }
+  }
+
+  btnConfirmer.disabled = true;
+  btnConfirmer.onclick = () => {
+    if (!choixCourant) return;
+    socket.emit('use_pouvoir', { role_id: roleId, target_role_id: choixCourant });
+    modale.classList.add('cachee');
+  };
+
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-cible-pouvoir').addEventListener('click', function() {
+  document.getElementById('modale-cible-pouvoir').classList.add('cachee');
+});
+
+// ============================================================================
+// Dossiers Royaux
+// ============================================================================
+
+function renderDossiers(state) {
+  const container = document.getElementById('contenu-dossiers');
+  container.innerHTML = '';
+  if (!state.dossiers_actifs || state.dossiers_actifs.length === 0) {
+    container.innerHTML = '<p class="texte-discret">Aucun dossier royal en cours.</p>';
+    return;
+  }
+  state.dossiers_actifs.forEach(dossier => {
+    const div = document.createElement('div');
+    div.className = 'encart-info';
+    div.style.margin = '0.5rem 0';
+    div.innerHTML = `
+      <strong>${dossier.nom}</strong> (${dossier.tours_restants} tours restants)<br>
+      <span class="texte-discret">${dossier.description}</span><br>
+      <span>Progression : ${Object.entries(dossier.ressource_courante).map(([res, val]) => {
+        const label = res === 'or_personnel' ? 'Or' : res === 'influence' ? 'Influence' : res === 'stabilite' ? 'Stabilité' : res;
+        return `${label}: ${val}/${dossier.ressources_requises[res]}`;
+      }).join(', ')}</span>
+    `;
+    const me = state.players[myPlayerUid];
+    if (me && !me.is_king && me.role_ids.length) {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-vert mt-1';
+      btn.textContent = 'Contribuer';
+      btn.addEventListener('click', () => ouvrirModaleContribuer(dossier.id, dossier.nom, dossier.ressources_requises, dossier.ressource_courante));
+      div.appendChild(document.createElement('br'));
+      div.appendChild(btn);
+    }
+    container.appendChild(div);
+  });
+}
+
+function ouvrirModaleContribuer(dossierId, dossierNom, ressourcesRequises, ressourceCourante) {
+  contribuerContext = { dossierId };
+  const modale = document.getElementById('modale-contribuer-dossier');
+  document.getElementById('contribuer-dossier-nom').textContent = `Dossier : ${dossierNom}`;
+  
+  const select = document.getElementById('contribuer-ressource');
+  select.innerHTML = '';
+  let hasOptions = false;
+  for (const [res, requis] of Object.entries(ressourcesRequises)) {
+    const courant = ressourceCourante[res] || 0;
+    if (courant < requis) {
+      hasOptions = true;
+      const option = document.createElement('option');
+      option.value = res;
+      const label = res === 'or_personnel' ? 'Or personnel' : 
+                     res === 'influence' ? 'Influence' : 
+                     res === 'stabilite' ? 'Stabilité' : res;
+      option.textContent = `${label} (${courant}/${requis})`;
+      select.appendChild(option);
+    }
+  }
+  
+  if (!hasOptions) {
+    const option = document.createElement('option');
+    option.textContent = 'Toutes les ressources sont complètes';
+    option.disabled = true;
+    select.appendChild(option);
+  }
+  
+  document.getElementById('contribuer-montant').value = 1;
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-contribuer').addEventListener('click', function() {
+  document.getElementById('modale-contribuer-dossier').classList.add('cachee');
+  contribuerContext = null;
+});
+
+document.getElementById('btn-confirmer-contribuer').addEventListener('click', function() {
+  if (!contribuerContext) return;
+  const ressource = document.getElementById('contribuer-ressource').value;
+  const montant = parseInt(document.getElementById('contribuer-montant').value, 10);
+  if (montant <= 0) {
+    afficherToast('Montant invalide.', 'error');
+    return;
+  }
+  socket.emit('contribuer_dossier', { 
+    dossier_id: contribuerContext.dossierId, 
+    ressource: ressource, 
+    montant: montant 
+  });
+  document.getElementById('modale-contribuer-dossier').classList.add('cachee');
+  contribuerContext = null;
+});
+
+function ouvrirModaleDossier() {
+  const modale = document.getElementById('modale-lancer-dossier');
+  const liste = document.getElementById('dossier-liste');
+  liste.innerHTML = '';
+  const cat = window.ROLES_CATALOG;
+  if (!cat) return;
+
+  cat.dossiers.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'encart-info';
+    div.style.margin = '0.5rem 0';
+    div.innerHTML = `
+      <strong>${d.nom}</strong><br>
+      <span class="texte-discret">${d.description}</span><br>
+      <span>Durée: ${d.duree_tours} tours | Ressources: ${Object.entries(d.ressources_requises).map(([k, v]) => {
+        const label = k === 'or_personnel' ? 'Or' : k === 'influence' ? 'Influence' : k === 'stabilite' ? 'Stabilité' : k;
+        return `${label}: ${v}`;
+      }).join(', ')}</span>
+    `;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary mt-1';
+    btn.textContent = 'Lancer ce dossier';
+    btn.addEventListener('click', () => {
+      socket.emit('launch_dossier', { dossier_id: d.id });
+      modale.classList.add('cachee');
+    });
+    div.appendChild(document.createElement('br'));
+    div.appendChild(btn);
+    liste.appendChild(div);
+  });
+
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-dossier').addEventListener('click', function() {
+  document.getElementById('modale-lancer-dossier').classList.add('cachee');
+});
+
+// ============================================================================
+// Décrets
+// ============================================================================
+
+function renderDecrets(state) {
+  const container = document.getElementById('contenu-decrets');
+  container.innerHTML = '';
+  if (!state.decrets_actifs || state.decrets_actifs.length === 0) {
+    container.innerHTML = '<p class="texte-discret">Aucun décret en cours.</p>';
+    return;
+  }
+  const decret = state.decrets_actifs[0];
+  const div = document.createElement('div');
+  div.className = 'encart-avertissement';
+  div.style.margin = '0.5rem 0';
+  let html = `<strong>📜 Décret :</strong> ${decret.description}<br>`;
+  html += `<span class="texte-discret">Effets publics : ${JSON.stringify(decret.public_effects)}</span><br>`;
+  if (decret.secret_effects && decret.secret_target_uid) {
+    const target = state.players[decret.secret_target_uid];
+    html += `<span class="texte-discret">⚠️ Effet secret ciblant ${target ? target.pseudo : 'inconnu'}</span><br>`;
+  }
+  html += `<span>Votes : ${Object.keys(decret.votes).length}/${Object.keys(state.players).length}</span>`;
+  div.innerHTML = html;
+
+  const me = state.players[myPlayerUid];
+  const btnContainer = document.createElement('div');
+  btnContainer.style.display = 'flex';
+  btnContainer.style.flexWrap = 'wrap';
+  btnContainer.style.gap = '0.5rem';
+  btnContainer.style.marginTop = '0.5rem';
+
+  if (me && !decret.votes[myPlayerUid]) {
+    const btnOui = document.createElement('button');
+    btnOui.className = 'btn btn-vert';
+    btnOui.textContent = 'Voter OUI';
+    btnOui.addEventListener('click', () => socket.emit('voter_decret', { vote_oui: true }));
+    btnContainer.appendChild(btnOui);
+    
+    const btnNon = document.createElement('button');
+    btnNon.className = 'btn btn-primary';
+    btnNon.textContent = 'Voter NON';
+    btnNon.addEventListener('click', () => socket.emit('voter_decret', { vote_oui: false }));
+    btnContainer.appendChild(btnNon);
+
+    const btnBribe = document.createElement('button');
+    btnBribe.className = 'btn btn-or';
+    btnBribe.textContent = 'Offrir un pot-de-vin';
+    btnBribe.addEventListener('click', () => ouvrirModaleBribe(decret.id, state));
+    btnContainer.appendChild(btnBribe);
+  }
+
+  div.appendChild(btnContainer);
+  container.appendChild(div);
+}
+
+function ouvrirModaleBribe(decretId, state) {
+  const modale = document.getElementById('modale-contribuer-dossier');
+  document.getElementById('contribuer-dossier-nom').textContent = 'Offrir un pot-de-vin';
+  const select = document.getElementById('contribuer-ressource');
+  select.innerHTML = '';
+  
+  let hasOptions = false;
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king) {
+      hasOptions = true;
+      const option = document.createElement('option');
+      option.value = uid;
+      option.textContent = p.pseudo;
+      select.appendChild(option);
+    }
+  }
+  
+  if (!hasOptions) {
+    const option = document.createElement('option');
+    option.textContent = 'Aucun joueur disponible';
+    option.disabled = true;
+    select.appendChild(option);
+  }
+  
+  document.getElementById('contribuer-montant').value = 1;
+  modale.classList.remove('cachee');
+  
+  const btnConfirmer = document.getElementById('btn-confirmer-contribuer');
+  btnConfirmer.onclick = () => {
+    const cibleUid = document.getElementById('contribuer-ressource').value;
+    const montant = parseInt(document.getElementById('contribuer-montant').value, 10);
+    if (!cibleUid || montant <= 0) {
+      afficherToast('Cible ou montant invalide.', 'error');
+      return;
+    }
+    socket.emit('offrir_bribe', { decret_id: decretId, cible_uid: cibleUid, montant: montant });
+    modale.classList.add('cachee');
+    btnConfirmer.onclick = null;
+  };
+  
+  document.getElementById('btn-annuler-contribuer').onclick = () => {
+    modale.classList.add('cachee');
+    document.getElementById('btn-confirmer-contribuer').onclick = null;
+  };
+}
+
+function ouvrirModaleDecret(state) {
+  const modale = document.getElementById('modale-proposer-decret');
+  
+  const select = document.getElementById('decret-secret-target');
+  select.innerHTML = '<option value="">Aucun</option>';
+  for (const [uid, p] of Object.entries(state.players)) {
+    if (uid !== myPlayerUid && !p.is_king) {
+      const option = document.createElement('option');
+      option.value = uid;
+      option.textContent = p.pseudo;
+      select.appendChild(option);
+    }
+  }
+  
+  document.getElementById('decret-description').value = '';
+  document.getElementById('decret-stabilite').value = 0;
+  document.getElementById('decret-orpublic').value = 0;
+  document.getElementById('decret-orperso').value = 0;
+  document.getElementById('decret-influence').value = 0;
+  document.getElementById('decret-prestige').value = 0;
+  
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-annuler-decret').addEventListener('click', function() {
+  document.getElementById('modale-proposer-decret').classList.add('cachee');
+});
+
+document.getElementById('btn-proposer-decret').addEventListener('click', function() {
+  const description = document.getElementById('decret-description').value.trim();
+  if (!description) { afficherToast('Description requise.', 'error'); return; }
+  
+  const public_effects = {};
+  const stab = parseInt(document.getElementById('decret-stabilite').value, 10) || 0;
+  const orPub = parseInt(document.getElementById('decret-orpublic').value, 10) || 0;
+  if (stab !== 0) public_effects.stabilite = stab;
+  if (orPub !== 0) public_effects.or_public = orPub;
+  
+  const secret_effects = {};
+  const orPerso = parseInt(document.getElementById('decret-orperso').value, 10) || 0;
+  const influence = parseInt(document.getElementById('decret-influence').value, 10) || 0;
+  const prestige = parseInt(document.getElementById('decret-prestige').value, 10) || 0;
+  if (orPerso !== 0) secret_effects.or_personnel = orPerso;
+  if (influence !== 0) secret_effects.influence = influence;
+  if (prestige !== 0) secret_effects.prestige_cour = prestige;
+  
+  const secret_target_uid = document.getElementById('decret-secret-target').value || null;
+  
+  socket.emit('proposer_decret', {
+    description: description,
+    public_effects: public_effects,
+    secret_target_uid: secret_target_uid,
+    secret_effects: secret_effects
+  });
+  document.getElementById('modale-proposer-decret').classList.add('cachee');
+});
+
+// ============================================================================
+// Tribunal
+// ============================================================================
+
+function ouvrirModaleTribunal(state) {
+  const modale = document.getElementById('modale-tribunal');
+  const texte = document.getElementById('tribunal-texte');
+  const voteDiv = document.getElementById('tribunal-vote');
+  const sentenceDiv = document.getElementById('tribunal-sentence');
+  voteDiv.style.display = 'none';
+  sentenceDiv.style.display = 'none';
+
+  const joueurs = Object.values(state.players).filter(p => !p.is_king && p.player_uid !== myPlayerUid);
+  if (joueurs.length === 0) {
+    texte.textContent = 'Aucun joueur à accuser.';
+    modale.classList.remove('cachee');
+    return;
+  }
+  let options = joueurs.map(p => `<option value="${p.player_uid}">${p.pseudo}</option>`).join('');
+  texte.innerHTML = `
+    <p>Choisissez l'accusé :</p>
+    <select id="accuse-select" style="width:100%; padding:0.5rem;">${options}</select>
+    <br><br>
+    <button class="btn btn-primary" id="tribunal-confirmer-accusation">Convoquer le tribunal (coût 10 Stabilité)</button>
+  `;
+  modale.classList.remove('cachee');
+
+  document.getElementById('tribunal-confirmer-accusation').addEventListener('click', function() {
+    const accuse = document.getElementById('accuse-select').value;
+    socket.emit('initier_tribunal', { accuse_uid: accuse });
+    modale.classList.add('cachee');
+  });
+}
+
+function ouvrirModaleVoteTribunal(accusePseudo) {
+  const modale = document.getElementById('modale-tribunal');
+  const texte = document.getElementById('tribunal-texte');
+  const voteDiv = document.getElementById('tribunal-vote');
+  const sentenceDiv = document.getElementById('tribunal-sentence');
+  texte.textContent = `⚖️ Le tribunal juge ${accusePseudo}. Votez :`;
+  voteDiv.style.display = '';
+  sentenceDiv.style.display = 'none';
+  modale.classList.remove('cachee');
+
+  document.getElementById('tribunal-btn-coupable').onclick = function() {
+    socket.emit('voter_tribunal', { coupable: true });
+    modale.classList.add('cachee');
+  };
+  document.getElementById('tribunal-btn-innocent').onclick = function() {
+    socket.emit('voter_tribunal', { coupable: false });
+    modale.classList.add('cachee');
+  };
+}
+
+document.getElementById('btn-fermer-tribunal').addEventListener('click', function() {
+  document.getElementById('modale-tribunal').classList.add('cachee');
+});
+
+// ============================================================================
+// Falsification (CORRIGÉE)
+// ============================================================================
+
+// Stockage global des options de falsification
+window._falsificationOptions = [];
+
+function ouvrirModaleFalsification(card, canFalsify, options) {
+  const modale = document.getElementById('modale-falsification');
+  const texte = document.getElementById('falsification-texte');
+  const reelDiv = document.getElementById('falsification-reel');
+  const editionDiv = document.getElementById('falsification-edition');
+  const btnFalsifier = document.getElementById('btn-falsifier-rapport');
+  const btnConfirmer = document.getElementById('btn-confirmer-rapport');
+
+  // Stocker les options globalement
+  window._falsificationOptions = options || [];
+
+  texte.textContent = card.texte;
+
+  reelDiv.innerHTML = `
+    <div style="font-weight:bold;">${card.titre}</div>
+    <div style="display:flex; gap:1rem; margin-top:0.3rem;">
+      <span class="${card.stabilite_delta >= 0 ? 'positif' : 'negatif'}">Stabilité ${card.stabilite_delta >= 0 ? '+' : ''}${card.stabilite_delta}</span>
+      <span class="${card.or_public_delta >= 0 ? 'positif' : 'negatif'}">Caisses ${card.or_public_delta >= 0 ? '+' : ''}${card.or_public_delta}</span>
+    </div>
+  `;
+
+  const me = lastState ? lastState.players[myPlayerUid] : null;
+  const jeSuisInterieur = me && (me.role_ids || []).includes('interieur');
+
+  if (jeSuisInterieur && canFalsify && options && options.length > 0) {
+    editionDiv.style.display = '';
+    btnFalsifier.style.display = '';
+    btnFalsifier.textContent = 'Appliquer la falsification';
+    
+    const optionsContainer = document.createElement('div');
+    optionsContainer.id = 'falsification-options';
+    optionsContainer.style.marginTop = '1rem';
+    optionsContainer.innerHTML = `
+      <p class="eyebrow">Choisissez votre rapport :</p>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        ${options.map((opt, idx) => `
+          <label class="choix-roi-option" id="falsif-opt-${idx}" style="cursor:pointer;">
+            <input type="radio" name="falsification-choice" value="${idx}" 
+                   ${idx === 0 ? 'checked' : ''}>
+            <span>
+              <strong>${opt.label}</strong><br>
+              <span style="font-size:0.85rem; color:var(--ardoise);">
+                ${opt.description} — 
+                Stabilité ${opt.stabilite_delta >= 0 ? '+' : ''}${opt.stabilite_delta}, 
+                Caisses ${opt.or_public_delta >= 0 ? '+' : ''}${opt.or_public_delta}
+              </span>
+            </span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+    
+    const oldEdition = editionDiv.querySelector('#falsification-options');
+    if (oldEdition) oldEdition.remove();
+    editionDiv.appendChild(optionsContainer);
+    
+    document.querySelectorAll('#falsification-options .choix-roi-option').forEach(el => {
+      el.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+        document.querySelectorAll('#falsification-options .choix-roi-option')
+          .forEach(opt => opt.classList.remove('selectionne'));
+        this.classList.add('selectionne');
+      });
+      if (el.querySelector('input[type="radio"]')?.checked) {
+        el.classList.add('selectionne');
+      }
+    });
+    
+    document.getElementById('input-stab-annonce').style.display = 'none';
+    document.getElementById('input-or-annonce').style.display = 'none';
+    
+  } else if (jeSuisInterieur && !canFalsify) {
+    editionDiv.style.display = 'none';
+    btnFalsifier.style.display = 'none';
+    btnConfirmer.textContent = 'Transmettre au Roi';
+  } else {
+    editionDiv.style.display = 'none';
+    btnFalsifier.style.display = 'none';
+    btnConfirmer.style.display = 'none';
+  }
+
+  if (!jeSuisInterieur) {
+    btnConfirmer.style.display = 'none';
+  } else {
+    btnConfirmer.style.display = '';
+  }
+
+  modale.classList.remove('cachee');
+}
+
+function fermerModaleFalsification() {
+  document.getElementById('modale-falsification').classList.add('cachee');
+}
+
+// Réinitialisation des écouteurs pour éviter les doublons
+document.getElementById('btn-confirmer-rapport').replaceWith(document.getElementById('btn-confirmer-rapport').cloneNode(true));
+document.getElementById('btn-falsifier-rapport').replaceWith(document.getElementById('btn-falsifier-rapport').cloneNode(true));
+
+// Bouton Confirmer (transmission fidèle)
+document.getElementById('btn-confirmer-rapport').addEventListener('click', function() {
+  socket.emit('confirm_report', {});
+});
+
+// Bouton Falsifier (avec choix)
+document.getElementById('btn-falsifier-rapport').addEventListener('click', function() {
+  const selectedRadio = document.querySelector('#falsification-options input[type="radio"]:checked');
+  if (!selectedRadio) {
+    afficherToast('Veuillez choisir une option de falsification.', 'error');
+    return;
+  }
+  const idx = parseInt(selectedRadio.value, 10);
+  const optData = window._falsificationOptions[idx];
+  if (!optData) {
+    afficherToast('Erreur : option introuvable.', 'error');
+    return;
+  }
+  
+  if (optData.id === 'fidele') {
+    socket.emit('confirm_report', {});
+  } else {
+    socket.emit('falsify_report', { 
+      stabilite_annoncee: optData.stabilite_delta, 
+      or_annonce: optData.or_public_delta,
+      option_id: optData.id
+    });
+  }
+  
+  document.getElementById('modale-falsification').classList.add('cachee');
+});
+
+// ============================================================================
+// Succession (Démission / Révocation)
+// ============================================================================
+
+function ouvrirModaleSuccession(mode, roleId, state) {
+  successionContext = { mode, role_id: roleId };
+  const titre = document.getElementById('succession-titre');
+  const texte = document.getElementById('succession-texte');
+  const liste = document.getElementById('succession-liste');
+  const btnConfirmer = document.getElementById('btn-confirmer-succession');
+
+  titre.textContent = mode === 'resign' ? '💥 Démission' : '👑 Révocation royale';
+  texte.textContent = mode === 'resign'
+    ? 'Désignez la personne qui reprend ce portefeuille (jamais le Roi).'
+    : 'Désignez le successeur de ce ministre destitué (jamais le Roi).';
+
+  liste.innerHTML = '';
+  let choixCourant = null;
+
+  Object.values(state.players).forEach(p => {
+    if (p.is_king) return;
+    if ((p.role_ids || []).includes(roleId)) return;
+
+    const option = document.createElement('label');
+    option.className = 'choix-roi-option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'succession-choix';
+    radio.value = p.player_uid;
+    radio.addEventListener('change', () => {
+      choixCourant = p.player_uid;
+      document.querySelectorAll('#succession-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
+      option.classList.add('selectionne');
+      btnConfirmer.disabled = false;
+    });
+    const texteOption = document.createElement('span');
+    let suffixe = (p.role_ids && p.role_ids.length) ? ' (cumulera ses portefeuilles)' : ' (libre)';
+    texteOption.textContent = p.pseudo + suffixe;
+    option.appendChild(radio);
+    option.appendChild(texteOption);
+    liste.appendChild(option);
+  });
+
+  btnConfirmer.disabled = true;
+  btnConfirmer.onclick = () => {
+    if (!choixCourant) return;
+    if (successionContext.mode === 'resign') {
+      socket.emit('resign', { role_id: successionContext.role_id, successor_uid: choixCourant });
+    } else {
+      socket.emit('revoke', { role_id: successionContext.role_id, successor_uid: choixCourant });
+    }
+    fermerModaleSuccession();
+  };
+
+  document.getElementById('modale-succession').classList.remove('cachee');
+}
+
+function fermerModaleSuccession() {
+  document.getElementById('modale-succession').classList.add('cachee');
+  successionContext = null;
+}
+
+document.getElementById('btn-annuler-succession').addEventListener('click', fermerModaleSuccession);
+
+// ============================================================================
+// Ministères (Brevets)
+// ============================================================================
+
+function renderMinisteres(state) {
+  const grille = document.getElementById('grille-ministeres');
+  grille.innerHTML = '';
+  const cat = window.ROLES_CATALOG;
+  if (!cat) return;
+
+  state.active_role_ids.forEach(roleId => {
+    const roleDef = cat.roles[roleId];
+    const titulaireUid = Object.keys(state.players).find(uid =>
+      (state.players[uid].role_ids || []).includes(roleId)
+    );
+    const titulaire = titulaireUid ? state.players[titulaireUid] : null;
+
+    const brevet = document.createElement('div');
+    brevet.className = 'brevet-ministre' + (titulaireUid === myPlayerUid ? ' cest-moi' : '') + (!titulaire ? ' role-vacant' : '');
+    brevet.style.setProperty('--accent-role', roleDef.color);
+
+    const ruban = document.createElement('div');
+    ruban.className = 'brevet-ruban';
+    ruban.textContent = roleDef.name.split(' ').slice(-1)[0];
+    brevet.appendChild(ruban);
+
+    const entete = document.createElement('div');
+    entete.className = 'brevet-entete';
+    entete.innerHTML = `<span class="brevet-icone">${roleDef.icon}</span><span class="brevet-nom-role">${roleDef.name}</span>`;
+    brevet.appendChild(entete);
+
+    const titulaireP = document.createElement('div');
+    titulaireP.className = 'brevet-titulaire';
+    if (titulaire) {
+      let cumulSuffixe = '';
+      if (titulaire.role_ids.length > 1) cumulSuffixe = ' (cumul)';
+      titulaireP.textContent = '👤 ' + titulaire.pseudo + cumulSuffixe + (titulaire.connected ? '' : ' — déconnecté');
+    } else {
+      titulaireP.textContent = '— poste vacant —';
+    }
+    brevet.appendChild(titulaireP);
+
+    const pastille = document.createElement('span');
+    pastille.className = 'brevet-statut-pastille';
+    pastille.textContent = `Or: ${titulaire ? titulaire.or_personnel : 0} · Influence: ${titulaire ? titulaire.influence : 0} · Prestige: ${titulaire ? titulaire.prestige_cour : 0}`;
+    brevet.appendChild(pastille);
+
+    const actions = document.createElement('div');
+    actions.style.marginTop = '0.6rem';
+    actions.style.display = 'flex';
+    actions.style.flexWrap = 'wrap';
+    actions.style.gap = '0.4rem';
+
+    if (titulaireUid === myPlayerUid && state.phase !== 'lobby' && state.phase !== 'terminee_victoire' && state.phase !== 'terminee_ruine') {
+      const btnDemission = document.createElement('button');
+      btnDemission.className = 'btn btn-fantome';
+      btnDemission.style.fontSize = '0.78rem';
+      btnDemission.style.padding = '0.4em 0.8em';
+      btnDemission.textContent = '💥 Démissionner';
+      btnDemission.addEventListener('click', () => ouvrirModaleSuccession('resign', roleId, state));
+      actions.appendChild(btnDemission);
+    }
+
+    const me = state.players[myPlayerUid];
+    if (me && me.is_king && titulaire && state.phase !== 'lobby' && state.phase !== 'terminee_victoire' && state.phase !== 'terminee_ruine') {
+      const btnRevoquer = document.createElement('button');
+      btnRevoquer.className = 'btn btn-fantome';
+      btnRevoquer.style.fontSize = '0.78rem';
+      btnRevoquer.style.padding = '0.4em 0.8em';
+      btnRevoquer.textContent = '👑 Révoquer';
+      btnRevoquer.addEventListener('click', () => ouvrirModaleSuccession('revoke', roleId, state));
+      actions.appendChild(btnRevoquer);
+    }
+
+    if (actions.children.length) brevet.appendChild(actions);
+    grille.appendChild(brevet);
+  });
+}
+
+// ============================================================================
+// Joueurs
+// ============================================================================
+
+function renderJoueurs(state) {
+  const liste = document.getElementById('liste-joueurs');
+  liste.innerHTML = '';
+  Object.values(state.players).forEach(p => {
+    const ligne = document.createElement('div');
+    ligne.className = 'ligne-joueur';
+    const gauche = document.createElement('span');
+    gauche.className = 'pseudo';
+    gauche.textContent = p.pseudo + (p.player_uid === myPlayerUid ? ' (vous)' : '');
+    ligne.appendChild(gauche);
+
+    const droite = document.createElement('span');
+    if (p.is_king) {
+      const pastille = document.createElement('span');
+      pastille.className = 'pastille-roi';
+      pastille.textContent = '👑 Roi';
+      droite.appendChild(pastille);
+    } else if (!p.connected) {
+      const dc = document.createElement('span');
+      dc.className = 'pastille-deconnecte';
+      dc.textContent = 'déconnecté';
+      droite.appendChild(dc);
+    }
+    ligne.appendChild(droite);
+    liste.appendChild(ligne);
+  });
+}
+
+// ============================================================================
+// Journal
+// ============================================================================
+
+function renderJournal(state) {
+  const journal = document.getElementById('journal-royal');
+  journal.innerHTML = '';
+  (state.log || []).slice().reverse().forEach(entry => {
+    const div = document.createElement('div');
+    div.className = 'entree-journal';
+    div.textContent = entry;
+    journal.appendChild(div);
+  });
+}
+
+// ============================================================================
+// Fin
+// ============================================================================
+
+function renderFin(state) {
+  const div = document.getElementById('ecran-fin');
+  const victoire = state.phase === 'terminee_victoire';
+
+  let html = '';
+  if (!victoire) {
+    html = `<div class="ecran-fin ruine">
+      <div class="titre-fin">💀 Le Royaume s'est effondré</div>
+      <p>Tous les joueurs perdent la partie.</p>
+    </div>`;
+  } else {
+    const scores = state.final_scores || {};
+    const lignes = Object.entries(scores)
+      .sort((a, b) => b[1].puissance - a[1].puissance)
+      .map(([uid, s]) => `
+        <tr class="${uid === state.winner_uid ? 'vainqueur' : ''}">
+          <td>${s.pseudo}${uid === state.winner_uid ? ' 👑' : ''}</td>
+          <td>${s.role}</td>
+          <td>${s.or_personnel}</td>
+          <td>${s.influence}</td>
+          <td>${s.prestige_cour}</td>
+          <td>${s.bonus_statut}</td>
+          <td>${s.bonus_stabilite}</td>
+          <td><strong>${s.puissance}</strong></td>
+        </tr>
+      `).join('');
+
+    html = `<div class="ecran-fin victoire">
+      <div class="titre-fin">🏆 Le Royaume a survécu !</div>
+      <table class="tableau-scores">
+        <thead><tr><th>Joueur</th><th>Poste(s)</th><th>Or</th><th>Influence</th><th>Prestige</th><th>Bonus Statut</th><th>Bonus Stabilité</th><th>Puissance</th></tr></thead>
+        <tbody>${lignes}</tbody>
+      </table>
+    </div>`;
+  }
+  div.innerHTML = html;
+}
+
+// ============================================================================
+// Bilan de tour
+// ============================================================================
+
+function afficherBilan(summary) {
+  const modale = document.getElementById('bilan-tour');
+  const contenu = document.getElementById('bilan-contenu');
+  let html = `<p><strong>Cycle ${summary.cycle} résolu.</strong></p>`;
+
+  if (summary.effets && summary.effets.length) {
+    html += '<div><strong>Effets des robinets :</strong></div>';
+    summary.effets.forEach(e => {
+      const parts = [];
+      if (e.or_personnel_delta) parts.push(`${e.or_personnel_delta > 0 ? '+' : ''}${e.or_personnel_delta} Or`);
+      if (e.stabilite_delta) parts.push(`${e.stabilite_delta > 0 ? '+' : ''}${e.stabilite_delta} Stab`);
+      if (e.influence_delta) parts.push(`${e.influence_delta > 0 ? '+' : ''}${e.influence_delta} Influence`);
+      const classe = (e.or_personnel_delta < 0 || e.stabilite_delta < 0) ? 'negatif' : 'positif';
+      html += `<div class="ligne"><span>${e.pseudo} (${e.role_name}) niveau ${e.niveau}</span><span class="${classe}">${parts.join(' ')}</span></div>`;
+    });
+  }
+
+  if (summary.carte) {
+    html += `<div><strong>Crise :</strong> ${summary.carte.titre}</div>`;
+    html += `<div class="ligne"><span>Effets réels</span><span>${summary.carte.reel.stabilite_delta > 0 ? '+' : ''}${summary.carte.reel.stabilite_delta} Stab, ${summary.carte.reel.or_public_delta > 0 ? '+' : ''}${summary.carte.reel.or_public_delta} Or</span></div>`;
+    if (summary.carte.falsifie) html += '<div class="negatif">⚠️ Rapport falsifié !</div>';
+  }
+
+  if (summary.entreprise) {
+    html += `<div>🏰 Entreprise : ${summary.entreprise.nom} — ${summary.entreprise.reussite ? '✅ Réussie' : '❌ Échouée'}</div>`;
+  }
+  if (summary.tache) {
+    html += `<div>❗ Mission : ${summary.tache.titre} — ${summary.tache.reussite ? '✅' : '❌'}</div>`;
+  }
+  if (summary.dossiers && summary.dossiers.length) {
+    summary.dossiers.forEach(d => {
+      html += `<div>📂 Dossier : ${d.nom} — ${d.reussite ? '✅' : '❌'}</div>`;
+    });
+  }
+
+  contenu.innerHTML = html;
+  modale.classList.remove('cachee');
+}
+
+document.getElementById('btn-fermer-bilan').addEventListener('click', function() {
+  document.getElementById('bilan-tour').classList.add('cachee');
+});
+
+// ============================================================================
+// Chat
+// ============================================================================
+
+document.getElementById('chat-formulaire').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  socket.emit('send_chat', { message: msg });
+  input.value = '';
+});
+
+function ajouterMessageChat(pseudo, message, isKing) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'message-chat' + (isKing ? ' auteur-roi' : '');
+  const auteurSpan = document.createElement('span');
+  auteurSpan.className = 'auteur';
+  auteurSpan.textContent = (isKing ? '👑 ' : '') + pseudo + ' : ';
+  div.appendChild(auteurSpan);
+  div.appendChild(document.createTextNode(message));
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+
+window.ROLES_CATALOG_READY.then(() => {
+  if (lastState) render(lastState);
+});
+</script>
+{% endblock %}
