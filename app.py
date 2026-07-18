@@ -1482,13 +1482,12 @@ class GameState:
         })
         
         for membre in chat.membres:
-            if membre != expediteur_uid:
-                emit("message_prive", {
-                    "chat_id": chat_id,
-                    "chat_nom": chat.nom,
-                    "expediteur": self.players[expediteur_uid].pseudo,
-                    "message": message[:500]
-                }, room=self.players[membre].sid)
+            emit("message_prive", {
+                "chat_id": chat_id,
+                "chat_nom": chat.nom,
+                "expediteur": self.players[expediteur_uid].pseudo,
+                "message": message[:500]
+            }, room=self.players[membre].sid)
         
         return True, "ok"
 
