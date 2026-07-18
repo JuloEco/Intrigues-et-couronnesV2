@@ -46,7 +46,7 @@
         <h2>Salon en attente</h2>
         <p class="texte-discret">Partagez ce code pour que vos rivaux vous rejoignent :</p>
         <p style="font-family:var(--font-mono); font-size:2rem; letter-spacing:0.18em; color:var(--sceau); margin:0.4em 0;" id="code-affiche"></p>
-        <div class="lobby-joueurs-grille" id="lobby-joueurs"></div>
+        <div class="lobby-joueurs-grille responsive-grid" id="lobby-joueurs"></div>
         <p class="texte-discret" id="lobby-hint">Il faut au moins 3 joueurs (1 Roi + 2 ministres) pour commencer.</p>
         <div id="zone-choix-roi" style="display:none; text-align:left; max-width:380px; margin:1.4rem auto 0;">
           <p class="eyebrow">Désigner le Roi</p>
@@ -90,13 +90,13 @@
       <!-- Ministères -->
       <div class="panneau">
         <div class="panneau-titre"><h2>Les Ministères</h2></div>
-        <div class="grille-ministeres" id="grille-ministeres"></div>
+        <div class="grille-ministeres responsive-grid" id="grille-ministeres"></div>
       </div>
 
       <!-- Journal -->
       <div class="panneau">
         <div class="panneau-titre"><h2>Journal de la Cour</h2></div>
-        <div class="journal-royal" id="journal-royal"></div>
+        <div class="journal-royal scrollable" id="journal-royal"></div>
       </div>
     </div>
 

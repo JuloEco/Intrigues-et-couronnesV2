@@ -8,6 +8,61 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
+
+/* ==========================================================================
+   CLASSES UTILITAIRES POUR LE RESPONSIVE
+   ========================================================================== */
+
+/* lments scrollables sur mobile */
+.scrollable {
+  overflow-y: auto;
+  max-height: 300px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollable-table {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Grilles adaptatives */
+.responsive-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* Conteneurs flexibles */
+.responsive-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Cartes adaptatives */
+.responsive-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Boutons adaptatifs */
+.responsive-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.8em 1.2em;
+}
+
+/* Texte adaptatif */
+.responsive-text {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+/* Images et icnes adaptatives */
+.responsive-icon {
+  width: 100%;
+  max-width: 40px;
+  height: auto;
+}
+
 /* ==========================================================================
    INTRIGUES & COURONNE — Système de design "Chancellerie"
    ========================================================================== */
@@ -334,6 +389,131 @@ input[type="range"]::-moz-range-thumb {
 /* Marges dans les brevets */
 .brevet-ministre .btn {
   margin: 0.2rem 0.2rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN  Adaptation mobile/tablette
+   ========================================================================== */
+
+/* Mobile (tlphones) */
+@media (max-width: 767px) {
+  html, body {
+    font-size: 16px;
+  }
+  .table-jeu {
+    padding: 0.5rem;
+    gap: 0.75rem;
+  }
+  header.entete-royale {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  .entete-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .jauges-royaume {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .sceau-jauge {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .corps-table {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+  }
+  .panneau {
+    grid-column: 1 / -1 !important;
+    max-width: 100% !important;
+  }
+  .grille-ministeres {
+    grid-template-columns: 1fr !important;
+  }
+  .brevet-ministre {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .brevet-ministre .robinet-controls {
+    width: 100%;
+  }
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.8em 1.2em;
+    font-size: 1rem;
+  }
+  .journal-royal {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .lobby-joueurs-grille {
+    grid-template-columns: 1fr !important;
+  }
+  input[type="range"] {
+    height: 12px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+  /* Masquer les lments secondaires sur mobile */
+  .panneau-titre h2 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablette (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .corps-table {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .panneau {
+    grid-column: span 2 !important;
+  }
+  .grille-ministeres {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .jauges-royaume {
+    gap: 1rem;
+  }
+  .btn {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* Desktop (> 1024px) - Layout par dfaut */
+@media (min-width: 1025px) {
+  .table-jeu {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  .corps-table {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .panneau {
+    max-width: 100%;
+  }
+  .grille-ministeres {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Amliorations gnrales pour le tactile */
+@media (hover: none) and (pointer: coarse) {
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 1em 1.5em;
+  }
+  button, .btn {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 </style>
 {% block extra_head %}{% endblock %}
