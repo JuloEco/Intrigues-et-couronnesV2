@@ -113,13 +113,6 @@
         <div id="personal-log" style="font-size:0.85rem; color:var(--encre-douce);"></div>
       </div>
 
-      <!-- Canaux Clandestins (chats privés) -->
-      <div class="panneau" id="panneau-chats-prives" style="display:none;">
-        <div class="panneau-titre"><h2>🕯️ Canaux Clandestins</h2></div>
-        <div id="liste-chats-prives" style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.6rem;"></div>
-        <div id="chat-prive-ouvert"></div>
-      </div>
-
       <!-- Chat public -->
       <div class="panneau chat-zone">
         <div class="panneau-titre"><h2>Chambre du Conseil</h2></div>
@@ -422,7 +415,7 @@ window.ROLES_CATALOG_READY = fetch('/api/roles')
 <!-- ===================== JAVASCRIPT COMPLET ===================== -->
 <script>
 /* ==========================================================================
-   INTRIGUES & COURONNE — Client de jeu complet (version corrigée)
+   INTRIGUES & COURONNE — Client de jeu complet (v3 corrigée)
    ========================================================================== */
 
 const ROOM_CODE = window.ROOM_CODE;
@@ -438,13 +431,13 @@ let contribuerContext = null;
 
 const PHASE_LABELS = {
   lobby: 'En attente',
-  discussion: 'Négociation',
-  decision: 'Délibération secrète',
-  rapport: 'Rapport de Crise',
-  resolution: 'Cycle résolu',
-  terminee_victoire: 'Partie terminée',
-  terminee_ruine: 'Le Royaume s\'est effondré',
-  tribunal: 'Tribunal Royal'
+  discussion: '💬 Négociation',
+  decision: '🔒 Délibération secrète',
+  rapport: '📜 Rapport de Crise',
+  resolution: '✅ Cycle résolu',
+  terminee_victoire: '🏆 Partie terminée',
+  terminee_ruine: '💀 Le Royaume s\'est effondré',
+  tribunal: '⚖️ Tribunal Royal'
 };
 
 // ============================================================================
@@ -475,9 +468,10 @@ socket.on('action_error', (data) => {
 });
 
 socket.on('timer_update', (data) => {
-  document.getElementById('timer-display').textContent = `⏳ ${data.seconds}s`;
-  if (data.seconds <= 0) {
-    document.getElementById('timer-display').textContent = '⏳ 0s';
+  const display = document.getElementById('timer-display');
+  if (display) {
+    display.textContent = `⏳ ${data.seconds}s`;
+    if (data.seconds <= 0) display.textContent = '⏳ 0s';
   }
 });
 
@@ -488,8 +482,10 @@ socket.on('timer_finished', () => {
 
 socket.on('personal_log', (data) => {
   const container = document.getElementById('personal-log');
-  container.innerHTML = data.logs.map(msg => `<div>• ${msg}</div>`).join('');
-  container.scrollTop = container.scrollHeight;
+  if (container) {
+    container.innerHTML = data.logs.map(msg => `<div>• ${msg}</div>`).join('');
+    container.scrollTop = container.scrollHeight;
+  }
 });
 
 socket.on('cycle_resolved', (summary) => {
@@ -516,10 +512,12 @@ socket.on('tribunal_vote_required', (data) => {
 
 socket.on('chat_prive_cree', (data) => {
   afficherToast(`⛪ Chat privé créé : ${data.nom}`, 'success');
+  if (lastState) renderChatsPrives(lastState);
 });
 
 socket.on('message_prive', (data) => {
   afficherToast(`📩 Message privé de ${data.expediteur} dans "${data.chat_nom}" : ${data.message}`, 'info');
+  ajouterMessagePrive(data.chat_id, data.expediteur, data.message);
 });
 
 socket.on('audience_debute', (data) => {
@@ -566,6 +564,7 @@ socket.on('crisis_attente', (data) => {
 
 function afficherToast(msg, type = 'error') {
   const toast = document.getElementById('toast-erreur');
+  if (!toast) return;
   toast.textContent = msg;
   toast.className = 'toast';
   if (type === 'success') toast.classList.add('success');
@@ -603,7 +602,7 @@ function ajusterMontantPotDeVin(delta) {
 }
 
 // ============================================================================
-// INTERFACE AUDIENCE
+// INTERFACE AUDIENCE (corrigée avec fallback)
 // ============================================================================
 
 function creerInterfaceAudience(data) {
@@ -637,9 +636,16 @@ function creerInterfaceAudience(data) {
       input.value = '';
     });
   }
+
+  // ✅ Fallback : supprimer l'interface après (duree + 5) secondes
+  clearTimeout(window._audienceTimeout);
+  window._audienceTimeout = setTimeout(() => {
+    supprimerInterfaceAudience();
+  }, (data.duree + 5) * 1000);
 }
 
 function supprimerInterfaceAudience() {
+  clearTimeout(window._audienceTimeout);
   const chat = document.getElementById('chat-audience');
   if (chat) chat.remove();
 }
@@ -651,6 +657,94 @@ function ajouterMessageAudience(expediteur, message) {
     div.style.padding = '0.2rem 0';
     div.style.borderBottom = '1px solid rgba(184,134,46,0.2)';
     div.innerHTML = `<strong style="color:var(--or);">${expediteur}</strong> : ${message}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+// ============================================================================
+// INTERFACE CHATS PRIVÉS
+// ============================================================================
+
+function renderChatsPrives(state) {
+  let container = document.getElementById('chats-prives-container');
+  if (!container) {
+    const zoneLaterale = document.querySelector('.zone-laterale');
+    if (!zoneLaterale) return;
+    container = document.createElement('div');
+    container.id = 'chats-prives-container';
+    container.className = 'panneau';
+    container.style.maxHeight = '200px';
+    container.style.overflowY = 'auto';
+    container.innerHTML = `<div class="panneau-titre"><h2>💬 Chats Privés</h2></div><div id="chats-prives-liste"></div>`;
+    zoneLaterale.prepend(container);
+  }
+  
+  const liste = document.getElementById('chats-prives-liste');
+  if (!liste) return;
+  liste.innerHTML = '';
+  
+  const chats = state.chats_prives || [];
+  if (chats.length === 0) {
+    liste.innerHTML = '<p class="texte-discret">Aucun chat privé.</p>';
+    return;
+  }
+  
+  chats.forEach(chat => {
+    if (!chat.membres.includes(myPlayerUid)) return;
+    
+    const div = document.createElement('div');
+    div.className = 'encart-info';
+    div.style.margin = '0.3rem 0';
+    div.style.cursor = 'pointer';
+    div.innerHTML = `
+      <strong>${chat.nom}</strong>
+      <span class="texte-discret" style="font-size:0.8rem;">(${chat.membres.length} membres)</span>
+    `;
+    div.addEventListener('click', () => ouvrirChatPrive(chat.id, chat.nom, chat.messages || []));
+    liste.appendChild(div);
+  });
+}
+
+function ouvrirChatPrive(chatId, nom, messages) {
+  const modale = document.createElement('div');
+  modale.className = 'voile-modale';
+  modale.id = 'modale-chat-prive-ouvert';
+  modale.innerHTML = `
+    <div class="boite-modale" style="max-width: 500px;">
+      <h3>💬 ${nom}</h3>
+      <div id="chat-prive-messages-${chatId}" style="height:200px; overflow-y:auto; border:1px solid var(--parchemin-ombre); padding:0.5rem; border-radius:var(--radius); margin-bottom:0.5rem;">
+        ${messages.map(m => `<div><strong>${m.pseudo}</strong> : ${m.message}</div>`).join('')}
+      </div>
+      <form id="chat-prive-form-${chatId}" style="display:flex; gap:0.5rem;">
+        <input type="text" id="chat-prive-input-${chatId}" placeholder="Message..." style="flex:1;">
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+      <div class="boite-modale-actions">
+        <button class="btn btn-fantome" onclick="this.closest('.voile-modale').remove()">Fermer</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modale);
+  
+  const form = document.getElementById(`chat-prive-form-${chatId}`);
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = document.getElementById(`chat-prive-input-${chatId}`);
+      const msg = input.value.trim();
+      if (!msg) return;
+      socket.emit('envoyer_message_prive', { chat_id: chatId, message: msg });
+      input.value = '';
+    });
+  }
+}
+
+function ajouterMessagePrive(chatId, expediteur, message) {
+  const container = document.getElementById(`chat-prive-messages-${chatId}`);
+  if (container) {
+    const div = document.createElement('div');
+    div.innerHTML = `<strong>${expediteur}</strong> : ${message}`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
   }
@@ -714,101 +808,6 @@ function render(state) {
   renderDossiers(state);
   renderDecrets(state);
   renderChatsPrives(state);
-}
-
-// ============================================================================
-// Canaux Clandestins (chats privés)
-// ============================================================================
-
-let chatPriveOuvertId = null;
-
-function renderChatsPrives(state) {
-  const panneau = document.getElementById('panneau-chats-prives');
-  const liste = document.getElementById('liste-chats-prives');
-  const zoneOuverte = document.getElementById('chat-prive-ouvert');
-  const mesChats = state.chats_prives || []; // déjà filtrés côté serveur à mes seuls chats
-
-  if (!mesChats.length) {
-    panneau.style.display = 'none';
-    chatPriveOuvertId = null;
-    return;
-  }
-  panneau.style.display = '';
-
-  liste.innerHTML = '';
-  mesChats.forEach(chat => {
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-fantome';
-    btn.style.fontSize = '0.78rem';
-    btn.style.padding = '0.3rem 0.6rem';
-    btn.textContent = (chat.id === chatPriveOuvertId ? '🔓 ' : '🔒 ') + chat.nom;
-    btn.addEventListener('click', () => {
-      chatPriveOuvertId = (chatPriveOuvertId === chat.id) ? null : chat.id;
-      renderChatsPrives(state);
-    });
-    liste.appendChild(btn);
-  });
-
-  zoneOuverte.innerHTML = '';
-  if (!chatPriveOuvertId) return;
-  const chat = mesChats.find(c => c.id === chatPriveOuvertId);
-  if (!chat) { chatPriveOuvertId = null; return; }
-
-  const membresNoms = chat.membres
-    .map(uid => (state.players[uid] ? state.players[uid].pseudo : '?'))
-    .join(', ');
-
-  const wrap = document.createElement('div');
-  wrap.style.cssText = 'border:1px solid var(--or); border-radius:var(--radius); padding:0.5rem; margin-top:0.4rem;';
-
-  const infoMembres = document.createElement('div');
-  infoMembres.style.cssText = 'font-size:0.75rem; color:var(--ardoise-claire); margin-bottom:0.4rem;';
-  infoMembres.textContent = 'Membres : ' + membresNoms;
-  wrap.appendChild(infoMembres);
-
-  const msgBox = document.createElement('div');
-  msgBox.id = 'chat-prive-messages';
-  msgBox.style.cssText = 'height:130px; overflow-y:auto; font-size:0.85rem; margin-bottom:0.4rem;';
-  (chat.messages || []).forEach(m => {
-    const div = document.createElement('div');
-    div.style.padding = '0.15rem 0';
-    const auteurSpan = document.createElement('strong');
-    auteurSpan.style.color = 'var(--or)';
-    auteurSpan.textContent = m.pseudo + ' : ';
-    div.appendChild(auteurSpan);
-    div.appendChild(document.createTextNode(m.message));
-    msgBox.appendChild(div);
-  });
-  wrap.appendChild(msgBox);
-
-  const form = document.createElement('form');
-  form.id = 'chat-prive-formulaire';
-  form.style.cssText = 'display:flex; gap:0.4rem;';
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.id = 'chat-prive-input';
-  input.maxLength = 500;
-  input.placeholder = 'Écrire dans le secret...';
-  input.autocomplete = 'off';
-  input.style.flex = '1';
-  const sendBtn = document.createElement('button');
-  sendBtn.type = 'submit';
-  sendBtn.className = 'btn btn-fantome';
-  sendBtn.textContent = 'Envoyer';
-  form.appendChild(input);
-  form.appendChild(sendBtn);
-  wrap.appendChild(form);
-
-  zoneOuverte.appendChild(wrap);
-  msgBox.scrollTop = msgBox.scrollHeight;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const msg = input.value.trim();
-    if (!msg) return;
-    socket.emit('envoyer_message_prive', { chat_id: chatPriveOuvertId, message: msg });
-    input.value = '';
-  });
 }
 
 // ============================================================================
@@ -978,12 +977,14 @@ function renderPhase(state) {
     const nbVotes = Object.keys(state.decisions || {}).length;
     compteur.textContent = `${nbVotes} / ${state.active_role_ids.length} ministères ont arrêté leur décision.`;
     contenu.appendChild(compteur);
+
   } else if (state.phase === 'rapport') {
     const p = document.createElement('p');
     p.className = 'texte-discret';
     const isInterieur = monRoleIds.includes('interieur');
     p.textContent = isInterieur ? 'Transmettez — ou falsifiez — le rapport de crise.' : 'Le Ministre de l\'Intérieur compose son rapport...';
     contenu.appendChild(p);
+
   } else if (state.phase === 'resolution') {
     const p = document.createElement('p');
     p.className = 'texte-discret';
@@ -994,6 +995,7 @@ function renderPhase(state) {
     btn.textContent = 'Passer au cycle suivant →';
     btn.addEventListener('click', () => socket.emit('next_cycle', {}));
     contenu.appendChild(btn);
+
   } else if (state.phase === 'tribunal') {
     const p = document.createElement('p');
     p.className = 'texte-discret';
@@ -1254,10 +1256,6 @@ function ouvrirModalePotDeVin(state) {
   window._potDeVinContext = { decret_id: decret.id };
 }
 
-// Réinitialisation des écouteurs pour éviter les doublons
-document.getElementById('btn-annuler-pot-de-vin').replaceWith(document.getElementById('btn-annuler-pot-de-vin').cloneNode(true));
-document.getElementById('btn-confirmer-pot-de-vin').replaceWith(document.getElementById('btn-confirmer-pot-de-vin').cloneNode(true));
-
 document.getElementById('btn-annuler-pot-de-vin').addEventListener('click', function() {
   document.getElementById('modale-pot-de-vin').classList.add('cachee');
   window._potDeVinContext = null;
@@ -1395,19 +1393,21 @@ function ouvrirModaleChatPrive(state) {
   container.innerHTML = '';
   
   for (const [uid, p] of Object.entries(state.players)) {
-    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
-      const label = document.createElement('label');
-      label.style.display = 'block';
-      label.style.margin = '0.2rem 0';
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = uid;
-      checkbox.style.marginRight = '0.5rem';
-      label.appendChild(checkbox);
-      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon).join('');
-      label.appendChild(document.createTextNode(`${roles} ${p.pseudo}`));
-      container.appendChild(label);
-    }
+    if (p.is_king) continue;
+    if (uid === myPlayerUid) continue;
+    if (!p.role_ids || p.role_ids.length === 0) continue;
+    
+    const label = document.createElement('label');
+    label.style.display = 'block';
+    label.style.margin = '0.2rem 0';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = uid;
+    checkbox.style.marginRight = '0.5rem';
+    label.appendChild(checkbox);
+    const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon).join('');
+    label.appendChild(document.createTextNode(`${roles} ${p.pseudo}`));
+    container.appendChild(label);
   }
   
   document.getElementById('chat-prive-nom').value = '';
@@ -1451,26 +1451,28 @@ function ouvrirModaleCiblePouvoir(state, roleId) {
   let choixCourant = null;
 
   for (const [uid, p] of Object.entries(state.players)) {
-    if (uid !== myPlayerUid && !p.is_king && p.role_ids && p.role_ids.length > 0) {
-      const option = document.createElement('label');
-      option.className = 'choix-roi-option';
-      const radio = document.createElement('input');
-      radio.type = 'radio';
-      radio.name = 'cible-pouvoir-choix';
-      radio.value = uid;
-      radio.addEventListener('change', () => {
-        choixCourant = uid;
-        document.querySelectorAll('#cible-pouvoir-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
-        option.classList.add('selectionne');
-        btnConfirmer.disabled = false;
-      });
-      const texteOpt = document.createElement('span');
-      const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon + ' ' + window.ROLES_CATALOG.roles[r].name).join(', ');
-      texteOpt.textContent = `${p.pseudo} (${roles})`;
-      option.appendChild(radio);
-      option.appendChild(texteOpt);
-      liste.appendChild(option);
-    }
+    if (uid === myPlayerUid) continue;
+    if (p.is_king) continue;
+    if (!p.role_ids || p.role_ids.length === 0) continue;
+    
+    const option = document.createElement('label');
+    option.className = 'choix-roi-option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'cible-pouvoir-choix';
+    radio.value = uid;
+    radio.addEventListener('change', () => {
+      choixCourant = uid;
+      document.querySelectorAll('#cible-pouvoir-liste .choix-roi-option').forEach(el => el.classList.remove('selectionne'));
+      option.classList.add('selectionne');
+      btnConfirmer.disabled = false;
+    });
+    const texteOpt = document.createElement('span');
+    const roles = p.role_ids.map(r => window.ROLES_CATALOG.roles[r].icon + ' ' + window.ROLES_CATALOG.roles[r].name).join(', ');
+    texteOpt.textContent = `${p.pseudo} (${roles})`;
+    option.appendChild(radio);
+    option.appendChild(texteOpt);
+    liste.appendChild(option);
   }
 
   btnConfirmer.disabled = true;
@@ -1488,8 +1490,7 @@ document.getElementById('btn-annuler-cible-pouvoir').addEventListener('click', f
 });
 
 // ============================================================================
-// Dossiers Royaux
-// ============================================================================
+// Dossiers Royaux// ============================================================================
 
 function renderDossiers(state) {
   const container = document.getElementById('contenu-dossiers');
@@ -1833,7 +1834,7 @@ document.getElementById('btn-fermer-tribunal').addEventListener('click', functio
 });
 
 // ============================================================================
-// Falsification (CORRIGÉE)
+// FALSIFICATION (CORRIGÉE)
 // ============================================================================
 
 // Stockage global des options de falsification
@@ -1863,11 +1864,20 @@ function ouvrirModaleFalsification(card, canFalsify, options) {
   const me = lastState ? lastState.players[myPlayerUid] : null;
   const jeSuisInterieur = me && (me.role_ids || []).includes('interieur');
 
+  // Réinitialiser l'affichage
+  btnConfirmer.style.display = 'none';
+  btnFalsifier.style.display = 'none';
+  editionDiv.style.display = 'none';
+
   if (jeSuisInterieur && canFalsify && options && options.length > 0) {
+    // Affichage des options de falsification
     editionDiv.style.display = '';
     btnFalsifier.style.display = '';
     btnFalsifier.textContent = 'Appliquer la falsification';
+    btnConfirmer.style.display = '';
+    btnConfirmer.textContent = 'Transmettre fidèlement';
     
+    // Créer les options
     const optionsContainer = document.createElement('div');
     optionsContainer.id = 'falsification-options';
     optionsContainer.style.marginTop = '1rem';
@@ -1912,20 +1922,55 @@ function ouvrirModaleFalsification(card, canFalsify, options) {
     document.getElementById('input-or-annonce').style.display = 'none';
     
   } else if (jeSuisInterieur && !canFalsify) {
-    editionDiv.style.display = 'none';
-    btnFalsifier.style.display = 'none';
+    // Intérieur mais robinet ouvert : seulement transmettre
+    btnConfirmer.style.display = '';
     btnConfirmer.textContent = 'Transmettre au Roi';
-  } else {
-    editionDiv.style.display = 'none';
     btnFalsifier.style.display = 'none';
+    editionDiv.style.display = 'none';
+  } else if (!jeSuisInterieur) {
+    // Les autres joueurs ne voient rien
     btnConfirmer.style.display = 'none';
+    btnFalsifier.style.display = 'none';
+    editionDiv.style.display = 'none';
   }
 
-  if (!jeSuisInterieur) {
-    btnConfirmer.style.display = 'none';
-  } else {
-    btnConfirmer.style.display = '';
-  }
+  // ✅ Attacher les écouteurs à chaque ouverture pour garantir le fonctionnement
+  // On retire les anciens écouteurs en clonant les boutons
+  const newConfirmBtn = btnConfirmer.cloneNode(true);
+  const newFalsifyBtn = btnFalsifier.cloneNode(true);
+  btnConfirmer.parentNode.replaceChild(newConfirmBtn, btnConfirmer);
+  btnFalsifier.parentNode.replaceChild(newFalsifyBtn, btnFalsifier);
+  
+  // Attacher les nouveaux écouteurs
+  document.getElementById('btn-confirmer-rapport').addEventListener('click', function() {
+    socket.emit('confirm_report', {});
+    fermerModaleFalsification();
+  });
+  
+  document.getElementById('btn-falsifier-rapport').addEventListener('click', function() {
+    const selectedRadio = document.querySelector('#falsification-options input[type="radio"]:checked');
+    if (!selectedRadio) {
+      afficherToast('Veuillez choisir une option de falsification.', 'error');
+      return;
+    }
+    const idx = parseInt(selectedRadio.value, 10);
+    const optData = window._falsificationOptions[idx];
+    if (!optData) {
+      afficherToast('Erreur : option introuvable.', 'error');
+      return;
+    }
+    
+    if (optData.id === 'fidele') {
+      socket.emit('confirm_report', {});
+    } else {
+      socket.emit('falsify_report', { 
+        stabilite_annoncee: optData.stabilite_delta, 
+        or_annonce: optData.or_public_delta,
+        option_id: optData.id
+      });
+    }
+    fermerModaleFalsification();
+  });
 
   modale.classList.remove('cachee');
 }
@@ -1933,42 +1978,6 @@ function ouvrirModaleFalsification(card, canFalsify, options) {
 function fermerModaleFalsification() {
   document.getElementById('modale-falsification').classList.add('cachee');
 }
-
-// Réinitialisation des écouteurs pour éviter les doublons
-document.getElementById('btn-confirmer-rapport').replaceWith(document.getElementById('btn-confirmer-rapport').cloneNode(true));
-document.getElementById('btn-falsifier-rapport').replaceWith(document.getElementById('btn-falsifier-rapport').cloneNode(true));
-
-// Bouton Confirmer (transmission fidèle)
-document.getElementById('btn-confirmer-rapport').addEventListener('click', function() {
-  socket.emit('confirm_report', {});
-});
-
-// Bouton Falsifier (avec choix)
-document.getElementById('btn-falsifier-rapport').addEventListener('click', function() {
-  const selectedRadio = document.querySelector('#falsification-options input[type="radio"]:checked');
-  if (!selectedRadio) {
-    afficherToast('Veuillez choisir une option de falsification.', 'error');
-    return;
-  }
-  const idx = parseInt(selectedRadio.value, 10);
-  const optData = window._falsificationOptions[idx];
-  if (!optData) {
-    afficherToast('Erreur : option introuvable.', 'error');
-    return;
-  }
-  
-  if (optData.id === 'fidele') {
-    socket.emit('confirm_report', {});
-  } else {
-    socket.emit('falsify_report', { 
-      stabilite_annoncee: optData.stabilite_delta, 
-      or_annonce: optData.or_public_delta,
-      option_id: optData.id
-    });
-  }
-  
-  document.getElementById('modale-falsification').classList.add('cachee');
-});
 
 // ============================================================================
 // Succession (Démission / Révocation)

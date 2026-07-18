@@ -1,126 +1,425 @@
-# Intrigues-et-couronnesV2
-**Livre des Règles Officielles — Version Alpha-0.2 (corrigée)**
+# 👑 Intrigues & Couronne
 
-Bienvenue à la Cour, conseiller. Dans Intrigues & Couronne, la frontière entre le dévouement et la haute trahison n'est dictée que par votre ambition. Ce jeu de société politique et semi-coopératif oppose des ministres aux rôles fixes et asymétriques, arbitrés par un Roi. Votre but ? Finir la partie avec la plus grande puissance politique sans faire sombrer le Royaume dans l'anarchie ou la faillite collective.
+**La frontière entre le dévouement et la haute trahison n'est dictée que par votre ambition.**
 
-1. Les Conditions de Victoire et de Défaite
-Le Royaume possède deux jauges globales suivies publiquement sur le plateau : la Stabilité du Royaume (de 0 à 100) et les Caisses de l'État (Or public).
+---
 
-⚠ La Ruine Collective : Si à la fin d'un cycle, la Stabilité atteint 0 (révolte populaire) ou si les Caisses de l'État tombent en dessous de zéro (banqueroute), le Royaume s'effondre. Tous les joueurs perdent immédiatement la partie.
-Si le Royaume survit au terme des 5 cycles (années), le décompte des points a lieu. Le joueur ayant le score de Puissance Politique le plus élevé est déclaré vainqueur.
+## 📖 Présentation
 
-Puissance = Or Personnel + Influence + Prestige de Cour + (Statut de Ministère × 10) + (Stabilité Finale ÷ 2)
+**Intrigues & Couronne** est un jeu de société politique en ligne, multijoueur et temps réel, qui plonge les joueurs dans les arcanes d'une cour royale versaillaise. Chaque participant incarne un ministre ou le Roi, et doit naviguer entre complots, corruption et gestion du Royaume pour accumuler la plus grande **Puissance Politique**... sans faire sombrer le Royaume dans l'anarchie ou la faillite.
 
-Le Roi ne participe pas à ce calcul : il n'a ni or personnel, ni influence, ni statut de ministère. Son rôle est exclusivement arbitral — mais il n'est plus pour autant spectateur (voir section 5bis).
+Le jeu est conçu pour **3 à 6 joueurs** (Roi inclus) et se déroule en **8 cycles** (années de règne). Chaque cycle est une phase de tension, de négociation et de décision où les intérêts personnels se heurtent à la survie du Royaume.
 
-2. La Dynamique Cognitive & La Charge de Travail
-Ici, aucune jauge artificielle ne limite vos actions. Le jeu est conçu pour générer une véritable charge mentale. Les informations circulent par des canaux secrets, les crises s'accumulent sous forme de cartes d'événements, et les demandes d'aide fusent. Si vous fermez un robinet trop longtemps pour faire chanter vos rivaux, vous serez submergé par les dossiers non résolus et la colère du Roi, vous poussant inévitablement à l'erreur ou à la démission.
+---
 
-3. Le Roi — l'Arbitre de la Couronne
-Avant toute chose : le Roi est un rôle à part entière, distinct des cinq ministères. Il est désigné au début de la partie (par tirage ou par accord entre les joueurs) et ne change pas en cours de jeu, sauf accord explicite de la table.
+## 🎯 Objectif du jeu
 
-Il ne possède aucun robinet : il ne produit ni Or, ni Stabilité, ni Influence par lui-même.
-Il reçoit les rapports de crise du Ministre de l'Intérieur et en prend connaissance avant le reste de la table.
-Il possède le pouvoir de révocation (voir section 5), mais celui-ci est limité à 2 usages par partie : un Roi qui destitue à la légère finit par ne plus pouvoir agir du tout.
-Il peut, une fois par cycle, ordonner une Grande Entreprise Royale (voir section 5bis) : c'est son unique manière d'agir directement sur le Royaume.
-Il ne compte jamais dans le calcul de la Puissance Politique finale — il ne peut donc pas gagner la partie, mais il perd avec tout le monde en cas de Ruine Collective.
-4. Les Ministères et Leurs Vannes (« Les Robinets »)
-Chaque ministre incarne un rôle fixe tout au long de la partie. Chaque rôle contrôle un flux indispensable et peut s'enrichir ou saboter selon deux voies : la Voie du Serviteur ou la Voie du Fourbe.
+### Conditions de Victoire
+Le jeu se termine de deux manières :
 
-📜 Le Ministre de l'Intérieur
-Titre de cour : Le Lieutenant Général de Police.
+**1. Victoire individuelle (après 8 cycles)**
+Si le Royaume survit aux 8 cycles, le décompte des points a lieu. Le joueur avec la plus grande **Puissance Politique** est déclaré vainqueur.
 
-Le Flux : L'Information et les Rapports de Crise. Il est le seul à piocher et lire le contenu réel des cartes d'événements du Royaume avant de les remonter au Roi.
+> **Puissance = Or Personnel + Influence + Prestige de Cour + (Statut de Ministère × 10) + (Stabilité Finale ÷ 2)**
 
-Voie du Serviteur : communiquer fidèlement les crises, étouffer les rumeurs et stabiliser le peuple en échange de gratifications royales.
+| Ressource | Description |
+|-----------|-------------|
+| **Or Personnel** | Richesse personnelle accumulée par le ministre |
+| **Influence** | Capacité à manipuler les autres joueurs |
+| **Prestige de Cour** | Réputation et considération à la Cour |
+| **Statut** | Poids du ministère (de 1 à 3) |
+| **Stabilité** | Santé du Royaume (bonus de moitié) |
 
-Voie du Fourbe : falsifier les rapports, revendre les informations secrètes ou accepter des pots-de-vin pour embellir le bilan d'un autre ministre. Attention : plus l'écart entre le rapport annoncé et la réalité est grand, plus le risque d'être démasqué par le Cabinet du Roi est élevé — un mensonge découvert coûte cher en Stabilité et en Prestige personnel ; un bluff réussi rapporte de l'Influence.
+**2. Défaite collective (Ruine du Royaume)**
+Si à tout moment :
+- La **Stabilité** atteint **0** (révolte populaire)
+- Les **Caisses de l'État** tombent en dessous de **0** (banqueroute)
 
-🎭 Pouvoir de Cour — Le Cabinet Noir : une fois par partie, ouvre en secret les lettres du Royaume et révèle la prochaine carte de crise avant que quiconque ne délibère.
+> ⚠️ **Le Royaume s'effondre et TOUS les joueurs perdent la partie.**
 
-🏛️ Le Surintendant des Finances
-Titre de cour : Le Surintendant, à la manière de Colbert.
+---
 
-Le Flux : L'Or Public et les Investissements. Il valide et distribue les fonds nécessaires aux actions de tous les autres ministères.
+## 👑 Les Rôles
 
-Voie du Serviteur : faire fructifier les caisses par des investissements sains, déclenchant des Primes de Performance étatiques.
+### Le Roi — L'Arbitre Suprême
+Le Roi est le joueur pivot, désigné au début de la partie. Il ne possède pas de robinet (il ne produit ni Or, ni Stabilité, ni Influence par lui-même) mais il détient des pouvoirs cruciaux :
 
-Voie du Fourbe : créer des lignes budgétaires fictives, prélever des taxes abusives non déclarées pour remplir sa cassette personnelle.
+| Pouvoir | Description | Limite |
+|---------|-------------|--------|
+| **Révocation** | Destituer un ministre et nommer un successeur | 2 fois par partie |
+| **Audience Royale** | Convoquer un ministre en entretien privé de 45s | Illimité (1 à la fois) |
+| **Lancer un Dossier** | Initiier un projet collaboratif | Illimité |
+| **Convoquer un Tribunal** | Accuser un ministre de trahison | Coût : 10 Stabilité |
 
-🎭 Pouvoir de Cour — L'Emprunt aux Financiers Génois : une fois par partie, obtient 25 Or public immédiatement — mais la dette est prélevée sur son Or personnel dès le cycle suivant.
+> ℹ️ Le Roi ne peut **jamais gagner** la partie (il n'a pas de score de Puissance), mais il **perd avec tout le monde** en cas de Ruine Collective.
 
-⛪ Le Grand Aumônier
-Titre de cour : Le Confesseur Royal, tel Bossuet en chaire.
+---
 
-Le Flux : La Légitimité et la Ferveur Populaire. Il contrôle l'absolution morale et l'humeur spirituelle des masses.
+### 📜 Ministre de l'Intérieur — Le Maître de l'Information
+*Titre de Cour : Le Lieutenant Général de Police*
 
-Voie du Serviteur : bénir les décrets, calmer les grognes paysannes par la foi, ce qui maintient la Stabilité générale.
+| Aspect | Détail |
+|--------|--------|
+| **Flux** | L'Information et les Rapports de Crise |
+| **Voie du Serviteur** | Communiquer fidèlement les crises, étouffer les rumeurs |
+| **Voie du Fourbe** | Falsifier les rapports, revendre des informations secrètes |
 
-Voie du Fourbe : accuser ses rivaux d'hérésie pour bloquer leurs décrets, et monnayer de lourdes indulgences en or personnel.
+**Pouvoir Spécial : La Falsification de Rapport**
+- Le Ministre de l'Intérieur est le seul à piocher et lire le contenu réel des cartes de crise.
+- Il peut choisir de **transmettre fidèlement** le rapport ou de le **falsifier** (si son robinet est sur **Fermé**).
+- En falsifiant, il peut modifier les chiffres annoncés (Stabilité et Or public) pour :
+  - **Minimiser** la crise (faire passer la menace pour moins grave)
+  - **Maximiser** la crise (surenchérir pour obtenir plus de budget)
+  - **Inverser** les effets (retourner complètement la situation)
+- **Risque** : Si l'écart entre le rapport annoncé et la réalité est trop grand, le Cabinet du Roi peut démasquer le mensonge. En cas de démasquage :
+  - **-6 Stabilité** pour le Royaume
+  - **-3 Prestige** pour le Ministre de l'Intérieur
+- **Récompense** : Si le mensonge passe inaperçu, le Ministre gagne **+3 Influence**.
 
-🎭 Pouvoir de Cour — Le Ban et l'Excommunication : une fois par partie, accuse publiquement d'hérésie un autre ministre, qui perd Influence et Prestige de Cour ; le scandale ébranle un peu la Stabilité du Royaume.
+> 🎭 **Pouvoir de Cour — Le Cabinet Noir** (1 fois par partie)
+> Le Ministre de l'Intérieur peut révéler en secret la prochaine carte de crise avant que quiconque ne délibère.
 
-🌾 Le Grand Maître des Subsistances
-Titre de cour : Le Grand Intendant des Vivres et Bâtiments.
+---
 
-Le Flux : Le Ravitaillement et la Logistique. Il gère les greniers à blé et les convois indispensables à tout mouvement d'envergure.
+### 💰 Surintendant des Finances — Le Banquier Corrompu
+*Titre de Cour : Le Surintendant*
 
-Voie du Serviteur : assurer la distribution de nourriture dans les provinces, générant des rentes commerciales passives et stables.
+| Aspect | Détail |
+|--------|--------|
+| **Flux** | L'Or Public et les Investissements |
+| **Voie du Serviteur** | Faire fructifier les caisses par des investissements sains |
+| **Voie du Fourbe** | Créer des lignes budgétaires fictives, détourner des fonds |
 
-Voie du Fourbe : stocker et spéculer sur le grain en période de disette pour faire exploser les prix au marché noir.
+**Pouvoir Spécial : Le Pot-de-Vin Institutionnel**
+- Le Surintendant peut injecter son **Or Personnel** directement dans un décret pour acheter le vote d'un autre ministre à son insu.
+- La cible reçoit un pot-de-vin secret et n'est pas informée de l'origine de l'argent.
+- **Effet** : La cible votera automatiquement **OUI** au décret.
+- **Coût** : Le montant en Or personnel est prélevé sur la cassette du Surintendant.
 
-🎭 Pouvoir de Cour — Le Grand Banquet de Versailles : une fois par partie, offre un banquet fastueux à toute la Cour : +Stabilité et +Prestige de Cour pour tous les ministres en poste, financé sur les Caisses de l'État.
+> 🎭 **Pouvoir de Cour — L'Emprunt aux Financiers Génois** (1 fois par partie)
+> Le Surintendant obtient immédiatement **+25 Or Public**, mais doit rembourser **8 Or Personnel** au cycle suivant.
 
-🛡️ Le Connétable
-Titre de cour : Le Capitaine des Mousquetaires du Roi.
+---
 
-Le Flux : La Maréchaussée et l'Exécution des Ordres. Il commande la garde royale et assure la sécurité physique à la cour.
+### ⛪ Grand Aumônier — Le Gardien des Âmes
+*Titre de Cour : Le Confesseur Royal*
 
-Voie du Serviteur : protéger les ministres des complots extérieurs et exécuter promptement les décrets d'arrestation du Roi. Ouvrir son robinet rassure désormais visiblement la Cour (léger bonus de Stabilité pour tout le monde).
+| Aspect | Détail |
+|--------|--------|
+| **Flux** | La Légitimité et la Ferveur Populaire |
+| **Voie du Serviteur** | Bénir les décrets, calmer les grognes paysannes |
+| **Voie du Fourbe** | Accuser ses rivaux d'hérésie, monnayer des indulgences |
 
-Voie du Fourbe : fermer les yeux sur les tentatives de vol ou d'assassinat entre ministres en échange d'une commission — mais l'anarchie perçue fait elle-même un peu chuter la Stabilité, même sans vol effectif.
+**Pouvoir Spécial : Les Canaux Clandestins**
+- L'Aumônier est le seul à pouvoir créer, gérer et infiltrer des **chats privés** secrets entre les joueurs.
+- Le Roi ne peut pas être invité dans ces chats.
+- L'Aumônier peut consulter tous les messages échangés dans les chats qu'il a créés.
+- **Impact** : Rien ne se trame sans qu'il ne le sache ou ne l'autorise. Il est le point de passage obligatoire de tous les complots de couloir.
 
-🎭 Pouvoir de Cour — La Grande Parade du Régiment des Gardes : une fois par partie, fait défiler la garde royale sous les fenêtres du palais : +Stabilité immédiate et +Prestige personnel.
+> 🎭 **Pouvoir de Cour — Le Ban et l'Excommunication** (1 fois par partie)
+> L'Aumônier accuse publiquement un autre ministre d'hérésie :
+> - **-4 Influence** pour la cible
+> - **-2 Prestige** pour la cible
+> - **-2 Stabilité** pour le Royaume (scandale)
 
-ℹ️ Pouvoirs de Cour : chaque ministère dispose d'un Pouvoir de Cour unique, utilisable une seule fois par partie, pendant la Discussion ou la Délibération. Ce sont des leviers stratégiques puissants — à réserver pour le moment le plus opportun.
-4bis. Les Missions Urgentes
-À chaque cycle, selon la nature de la carte de crise piochée et selon les ministères réellement pourvus à la table, une Mission Urgente peut se déclencher pour l'un des ministres en poste. Une émeute de la faim, par exemple, peut sommer le Ministre de l'Intérieur de réclamer en urgence des vivres au Grand Maître des Subsistances, ou de l'or au Surintendant des Finances.
+---
 
-Certaines missions se règlent seul ; d'autres exigent l'aide rapide d'un ministère précis, qui doit accepter d'y consacrer une part de son Or personnel.
-Si l'aide nécessaire est obtenue et que le ministre concerné accomplit la mission avant la fin du cycle, la table en récolte les bénéfices (Stabilité, Or, Influence…).
-Si la mission est négligée — faute de négociation assez rapide ou d'un ministère absent de la partie — une pénalité s'applique automatiquement.
-Chaque ministère dispose d'une dizaine de missions possibles dans son répertoire ; le jeu ne propose que celles compatibles avec les rôles réellement présents autour de la table.
+### 🌾 Grand Maître des Subsistances — La Voix du Peuple
+*Titre de Cour : Le Grand Intendant des Vivres*
 
-4ter. Les Grandes Entreprises Royales
-Le Roi n'est plus un simple spectateur : à raison d'une par cycle, il peut ordonner une Grande Entreprise — faire la guerre, sceller une alliance dynastique, lancer un grand chantier... Chaque Entreprise exige que certains ministères précis soient effectivement pourvus par des joueurs (par exemple, « Faire la Guerre » nécessite un Connétable et un Surintendant des Finances en poste).
+| Aspect | Détail |
+|--------|--------|
+| **Flux** | Le Ravitaillement et la Logistique |
+| **Voie du Serviteur** | Assurer la distribution de nourriture |
+| **Voie du Fourbe** | Spéculer sur le grain, créer des pénuries artificielles |
 
-Une fois l'Entreprise lancée, chaque ministre requis doit décider de s'investir, à ses frais (en Or personnel).
-Si tous les ministres requis se sont investis avant la résolution du cycle, l'Entreprise réussit : la Couronne en récolte les fruits (Or public, Stabilité, Influence pour les ministres impliqués).
-Si l'un d'eux fait défaut, l'Entreprise échoue et le Royaume en subit les conséquences — l'or déjà englouti dans la préparation n'est jamais remboursé.
-Une dizaine de Grandes Entreprises existent, mobilisant des combinaisons variées de un ou deux ministères ; seules celles dont les rôles requis sont en jeu sont proposées au Roi.
+**Pouvoir Spécial : Le Veto Populaire**
+- Une fois par partie, le Maître des Subsistances peut annuler **purement et simplement** le décret en cours, quelle que soit l'issue du vote.
+- **Impact** : C'est l'arme anti-corruption ultime. Même si le Surintendant a acheté toute la table pour faire passer une loi injuste, le Maître des Subsistances peut tout faire capoter au dernier moment au nom de la rue.
 
-5. Le Pouvoir Royal : Révocation & Démission
-Le Roi possède le pouvoir de destituer un ministre s'il le soupçonne de trahison ou d'incompétence, afin de nommer un autre joueur à sa place — mais ce droit est limité à deux révocations par partie. Un troisième soupçon devra se régler autrement qu'en changeant les têtes.
+> 🎭 **Pouvoir de Cour — Le Grand Banquet de Versailles** (1 fois par partie)
+> Le Maître des Subsistances offre un banquet fastueux à toute la Cour :
+> - **+8 Stabilité** pour le Royaume
+> - **+5 Prestige** pour tous les ministres en poste
+> - Coûte **15 Or Public** (financé sur les Caisses de l'État)
 
-💥 L'Arme de la Démission (corrigée) : à tout moment, un ministre acculé par les dettes ou refusant de payer une crise sur ses deniers personnels peut annoncer sa Démission. Contrairement à une rumeur répandue, sa charge de travail n'est pas répartie entre tous les autres joueurs : elle est intégralement transférée à une seule personne désignée par le ministre démissionnaire (ou par consensus de la table), qui devient le nouveau titulaire du poste. Cette personne ne peut jamais être le Roi. Si tous les autres joueurs ont déjà un portefeuille, le successeur désigné cumule temporairement les deux postes jusqu'à ce qu'un nouvel arrangement soit trouvé.
-Ce chaos logistique reste un puissant moyen de pression : charger un seul successeur de deux portefeuilles à la fois le place dans une position délicate, faisant de la démission un chantage redoutable même sous sa forme corrigée.
+---
 
-6. Jouer en Effectif Réduit
-Intrigues & Couronne se joue de 3 à 6 joueurs (Roi inclus). Le nombre de ministères actifs dépend de l'effectif :
+### 🛡️ Connétable — La Force Armée
+*Titre de Cour : Le Capitaine des Mousquetaires du Roi*
 
-Joueurs (Roi inclus)	Ministères actifs	Joueurs « libres »
-3	2 (tirés au sort parmi les 5)	0
-4	3 (tirés au sort parmi les 5)	0
-5	3 (tirés au sort parmi les 5)	1
-6	4 (tirés au sort parmi les 5)	1
-7+	5 (tous actifs)	reste
-ℹ️ À propos du tirage : les ministères actifs sont tirés aléatoirement parmi les cinq possibles à chaque nouvelle partie. À 3 joueurs par exemple, vous pourriez très bien jouer une partie « Finances + Connétable » et la suivante « Aumônier + Subsistances » — chaque configuration change radicalement l'équilibre des flux du Royaume.
-Quand l'effectif le permet (5 joueurs et plus), un ou plusieurs joueurs restent volontairement sans portefeuille au démarrage. Ils participent pleinement aux discussions et peuvent devenir, à tout moment, le successeur désigné d'un ministre démissionnaire ou révoqué — un rôle d'attente qui n'a rien de passif !
+| Aspect | Détail |
+|--------|--------|
+| **Flux** | La Maréchaussée et l'Exécution des Ordres |
+| **Voie du Serviteur** | Protéger les ministres, exécuter les décrets du Roi |
+| **Voie du Fourbe** | Fermer les yeux sur les vols, abuser de sa force |
 
-7. Déroulement d'un Cycle
-Discussion libre : les joueurs négocient, complotent, s'accusent.
-Décision simultanée : chaque ministre choisit en secret d'Ouvrir ou de Fermer son robinet.
-Rapport de crise : le Ministre de l'Intérieur pioche une carte et la transmet — fidèlement ou non — au Roi et à la table.
-Résolution : tous les effets (robinets + carte) s'appliquent en même temps aux jauges du Royaume et aux ressources personnelles.
-Vérification de la Ruine : si la Stabilité ou les Caisses publiques chutent trop bas, la partie s'arrête immédiatement pour tout le monde.
-Le Royaume survit à 5 cycles (années) avant le décompte final des points.
+**Pouvoir Spécial : L'Arrestation Préventive**
+- Au début d'une phase de discussion, le Connétable peut cibler un ministre pour l'isoler.
+- La cible est **bannie de tous les chats privés** (les siens sont coupés).
+- La cible ne peut **ni envoyer ni recevoir de messages privés**.
+- La cible est **gelée de toute communication secrète** pendant le cycle.
+- **Impact** : C'est le bouton d'urgence anti-complot. Si le Connétable sent qu'une alliance secrète va le détruire ou renverser le Roi, il coupe brutalement les lignes de communication des suspects.
+
+> 🎭 **Pouvoir de Cour — La Grande Parade du Régiment des Gardes** (1 fois par partie)
+> Le Connétable fait défiler la garde royale sous les fenêtres du palais :
+> - **+3 Stabilité** pour le Royaume
+> - **+6 Prestige** personnel pour le Connétable
+
+---
+
+## ⚙️ Les Robinets à 4 Niveaux
+
+Chaque ministre choisit secrètement un niveau d'ouverture de son robinet (0 à 3) pendant la phase de délibération. Ce choix détermine l'équilibre entre l'intérêt personnel et l'intérêt du Royaume.
+
+| Niveau | Nom | Effet sur le Royaume | Effet Personnel | Risque |
+|--------|-----|---------------------|-----------------|--------|
+| **0** | 🛑 Fermé | Aucun revenu pour l'État | Corruption maximale (+20 à +30 Or perso) | Pénalités sévères |
+| **1** | ⚠️ Restreint | Revenu minimal | Corruption modérée (+8 à +15 Or perso) | - |
+| **2** | ⚖️ Normal | Revenu standard | Aucun gain personnel | Rythme de croisière |
+| **3** | 🔥 Surchauffe | Revenu maximal pour l'État | Aucun gain personnel | **-5 à -10 Stabilité** (grogne sociale) |
+
+### Effets par ministère
+
+| Ministère | Niveau 0 | Niveau 1 | Niveau 2 | Niveau 3 |
+|-----------|----------|----------|----------|----------|
+| **Intérieur** | +20 Or perso | +10 Or perso | +3 Influence, +1 Stab | +5 Influence, -5 Stab |
+| **Finances** | +30 Or perso | +15 Or perso | +5 Or public | +15 Or public, -5 Stab |
+| **Aumônier** | +20 Or perso, -5 Stab | +10 Or perso | +3 Stab | +8 Stab, -10 Or public |
+| **Subsistances** | +15 Or perso, -4 Stab | +8 Or perso | +2 Or public, +1 Stab | +5 Or public, +3 Stab, -5 Or perso |
+| **Connétable** | +15 Or perso, -3 Stab | +8 Or perso | +3 Stab | +6 Stab, -5 Or public |
+
+> 💡 **Astuce** : Le niveau de robinet influence également les pouvoirs spéciaux. Par exemple, le Ministre de l'Intérieur ne peut falsifier un rapport que si son robinet est sur **Fermé (niveau 0)**.
+
+---
+
+## 📜 Les Décrets
+
+Les décrets sont des **lois** proposées par les ministres pendant la phase de négociation.
+
+### Proposer un décret
+- Tout ministre (sauf le Roi) peut proposer un décret.
+- Le décret a des **effets publics** (affectant le Royaume) et éventuellement des **effets secrets** (ciblant un joueur spécifique).
+- Exemple d'effets publics : `{"stabilite": 5, "or_public": -10}`
+- Exemple d'effets secrets : `{"or_personnel": -10, "influence": -3}`
+
+### Voter un décret
+- Tous les joueurs (y compris le Roi) votent.
+- Le vote est **public** (les joueurs voient qui vote quoi).
+- Le décret est adopté si **plus de 50%** des votes sont favorables.
+
+### Les pots-de-vin
+- Pendant la phase de délibération, les joueurs peuvent **offrir des pots-de-vin** pour acheter les votes.
+- Le pot-de-vin est un transfert d'Or personnel.
+- La cible reçoit le pot-de-vin et peut décider de voter OUI ou NON.
+
+### Contrer un décret
+- **Veto Populaire** (Subsistances) : annule le décret en cours.
+- **Arrestation Préventive** (Connétable) : bloque la participation d'un ministre au vote.
+
+---
+
+## 📂 Les Dossiers Royaux
+
+Les Dossiers Royaux sont des **projets collaboratifs** sur plusieurs tours, lancés par le Roi.
+
+### Caractéristiques
+- **Durée** : 2 à 4 tours
+- **Ressources requises** : Or personnel, Influence, Stabilité
+- **Participation** : Les ministres contribuent volontairement avec leurs ressources
+- **Réussite** : Atteindre l'objectif de ressources avant la fin du compte à rebours
+
+### Exemples de Dossiers
+
+| Dossier | Durée | Ressources | Récompense (réussite) | Pénalité (échec) |
+|---------|-------|------------|----------------------|------------------|
+| **Grande Muraille du Nord** | 3 tours | 60 Or perso, 20 Influence | +20 Stab, +30 Or pub, +5 Inf | -15 Stab, -20 Or pub |
+| **Université Royale** | 2 tours | 40 Or perso, 25 Influence | +15 Or pub, +8 Inf | -5 Stab, -10 Or pub |
+| **Expédition en Nouvelle-France** | 4 tours | 50 Or perso, 10 Stab | +40 Or pub, +15 Stab, +3 Inf | -10 Stab, -15 Or pub |
+
+### Participation
+- Chaque ministre peut contribuer à chaque tour.
+- Les contributions sont limitées : on ne peut pas donner plus que ce qui est requis.
+- En cas de réussite, tous les contributeurs reçoivent un bonus d'Influence.
+
+---
+
+## ⚖️ Le Tribunal Royal
+
+Le Tribunal est une phase exceptionnelle convoquée par le Roi pour juger un ministre accusé de trahison.
+
+### Conditions
+- **Coût** : 10 Stabilité
+- **Disponibilité** : Une fois par cycle maximum
+- **Accusation** : Le Roi choisit un ministre à juger
+
+### Déroulement
+1. **Le Roi accuse** un ministre (coût 10 Stabilité)
+2. **Débat oral** entre les joueurs (phase de discussion)
+3. **Vote secret** des autres ministres (Coupable / Innocent)
+4. **Sentence** prononcée par le Roi
+
+### Sentences possibles
+| Sentence | Effet |
+|----------|-------|
+| **Amende** | L'accusé doit verser 20 Or personnel au Trésor |
+| **Suspension** | L'accusé perd ses fonctions pour le prochain tour |
+| **Révocation** | L'accusé perd son poste (devient Courtisan sans portefeuille) |
+
+---
+
+## 💬 Les Chats Privés (Aumônier)
+
+### Création
+- Seul le **Grand Aumônier** peut créer des chats privés.
+- Le Roi **ne peut pas** être invité.
+- Les ministres peuvent être invités s'ils ont un portefeuille.
+
+### Fonctionnalités
+- Les membres peuvent échanger des messages en temps réel.
+- L'Aumônier peut consulter tous les messages de tous les chats.
+- L'Arrestation Préventive du Connétable peut bannir un joueur des chats privés.
+
+### Pourquoi c'est fun
+- Rien ne se trame sans que l'Aumônier ne le sache.
+- Les complots de couloir deviennent un jeu d'espionnage.
+- Le Connétable peut couper les lignes de communication des suspects.
+
+---
+
+## 👑 Les Audiences Royales
+
+Le Roi peut convoquer un ministre en **Audience Royale Privée** (entretien individuel de 45 secondes).
+
+### Déroulement
+1. Le Roi clique sur "Audience Royale" et choisit un ministre.
+2. Une fenêtre de chat privé s'ouvre entre le Roi et le ministre.
+3. Les autres joueurs sont notifiés : *"Le Roi a convoqué X en audience."*
+4. Pendant 45 secondes, le Roi et le ministre peuvent échanger en privé.
+5. Le timer de négociation est **mis en pause** pendant l'audience.
+
+### Pourquoi c'est fun
+- Le Roi peut "cuisiner" le ministre sur ses intentions.
+- Les autres joueurs spéculent sur ce qui se dit.
+- Le ministre convoqué peut trahir ses alliés... ou les protéger.
+
+---
+
+## 🎲 Déroulement d'un Cycle (détaillé)
+
+### Phase 1 : 💬 Négociation (55 secondes)
+- Les joueurs discutent, négocient, complotent.
+- Le Roi peut lancer des Dossiers Royaux ou convoquer une Audience.
+- Les ministres peuvent proposer des Décrets.
+- L'Aumônier peut créer des Chats Privés.
+- Le Connétable peut arrêter un ministre préventivement.
+- **Timer** : 55 secondes avant le passage à la phase suivante.
+
+### Phase 2 : 🔒 Délibération secrète
+- Chaque ministre choisit **secrètement** le niveau de son robinet (0 à 3).
+- Le choix est individuel et invisible aux autres joueurs.
+- Le Roi n'a pas de robinet.
+
+### Phase 3 : 📜 Rapport de Crise
+- Le Ministre de l'Intérieur pioche une carte de crise.
+- Il peut la **transmettre fidèlement** ou la **falsifier** (si son robinet est sur Fermé).
+- En falsifiant, il modifie les chiffres annoncés.
+- **Risque** : Être démasqué par le Cabinet du Roi.
+- **Récompense** : Gagner en Influence si le mensonge passe inaperçu.
+
+### Phase 4 : ✅ Résolution
+- Tous les effets s'appliquent simultanément :
+  - Effets des robinets (sur les ressources personnelles et publiques)
+  - Effets de la carte de crise (sur la Stabilité et les Caisses)
+  - Effets des pouvoirs spéciaux
+  - Effets des Dossiers Royaux (succès ou échec)
+- Vérification des conditions de ruine.
+
+### Phase 5 : 📊 Bilan de Tour
+- Un récapitulatif s'affiche avec tous les effets du cycle.
+- Les joueurs peuvent consulter le bilan avant de passer au cycle suivant.
+- Bouton : **"Passer au cycle suivant"** → Retour à la Phase 1.
+
+---
+
+## 🏆 Score final
+
+Après 8 cycles, le jeu se termine. Le décompte des points s'effectue automatiquement.
+
+### Calcul de la Puissance Politique
+
+Puissance = Or Personnel + Influence + Prestige de Cour + (Statut × 10) + (Stabilité ÷ 2)
+
+
+### Exemple de calcul
+| Joueur | Or | Influence | Prestige | Statut | Stabilité | Puissance |
+|--------|----|-----------|----------|--------|-----------|-----------|
+| Comte de Valmont | 45 | 12 | 8 | 3 | 72 | 45 + 12 + 8 + 30 + 36 = **131** |
+| Duc de Richelieu | 32 | 18 | 5 | 2 | 72 | 32 + 18 + 5 + 20 + 36 = **111** |
+| Cardinal Mazarin | 28 | 22 | 12 | 2 | 72 | 28 + 22 + 12 + 20 + 36 = **118** |
+
+> Le joueur avec la plus grande Puissance est déclaré **vainqueur** de la partie.
+
+---
+
+## 🎯 Conseils stratégiques
+
+### Pour le Roi
+- **Gérez vos révocations** : vous n'en avez que 2, utilisez-les à bon escient.
+- **Exploitez les Audiences** : isolez un ministre pour le faire parler.
+- **Lancez des Dossiers** : les réussites stabilisent le Royaume.
+- **Convoquez des Tribunaux** : faites payer les traîtres (coût 10 Stabilité).
+
+### Pour les Ministres
+- **Équilibrez votre robinet** : trop de corruption affaiblit le Royaume.
+- **Utilisez vos pouvoirs** : un pouvoir non utilisé est un pouvoir perdu.
+- **Négociez** : les alliances secrètes peuvent renverser un vote.
+- **Surveillez l'Aumônier** : il sait tout ce que vous faites.
+- **Méfiez-vous du Connétable** : il peut vous couper de vos alliés.
+
+### Pour l'Aumônier
+- **Créez des chats** : soyez le maître des informations.
+- **Infiltrez les conversations** : vous savez tout.
+- **Excommuniez** : faites payer vos ennemis.
+
+### Pour le Surintendant
+- **Achetez des votes** : faites passer les décrets qui vous arrangent.
+- **Économisez** : le Pot-de-Vin Institutionnel coûte cher.
+- **Empruntez** : l'Emprunt aux Génois peut sauver le Royaume... ou le ruiner.
+
+### Pour le Subsistances
+- **Veto Populaire** : gardez-le pour le décret le plus dangereux.
+- **Protégez le peuple** : une Stabilité basse = défaite collective.
+- **Spéculer** : le niveau 3 de robinet rapporte gros mais coûte en Stabilité.
+
+### Pour le Connétable
+- **Arrêtez préventivement** : coupez les complots dans l'œuf.
+- **Protégez les votes** : votre robinet ouvert empêche les vols.
+- **Paradez** : la Grande Parade est un excellent boost de Prestige.
+
+---
+
+## 🚀 Installation
+
+### Prérequis
+- Python 3.10 ou supérieur
+- pip
+
+### Étapes
+
+```bash
+# 1. Cloner le projet
+git clone <url-du-projet>
+cd intrigues_couronne
+
+# 2. Créer un environnement virtuel (recommandé)
+python -m venv venv
+source venv/bin/activate  # Sur Linux/Mac
+# ou
+venv\Scripts\activate     # Sur Windows
+
+# 3. Installer les dépendances
+pip install -r requirements.txt
+
+# 4. Lancer le serveur
+python app.py
