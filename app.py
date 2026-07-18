@@ -1554,23 +1554,11 @@ class GameState:
             if self.phase == Phase.DISCUSSION:
                 self.timer_running = True
                 self.timer_seconds = max(1, temps_restant)
-
-        # NOTE : cette méthode est déclenchée depuis un thread threading.Timer,
-        # donc SANS contexte de requête Flask/SocketIO actif. emit() (bare)
-        # exige ce contexte et lèverait/avalerait une erreur silencieusement
-        # dans ce thread — plus personne ne serait jamais notifié de la fin
-        # de l'audience. socketio.emit() fonctionne depuis n'importe quel
-        # thread (c'est déjà le mécanisme utilisé par timer_loop).
-        socketio.emit("audience_terminée", {
+        
+        emit("audience_terminée", {
             "roi": self.players[roi_uid].pseudo,
             "cible": self.players[cible_uid].pseudo
         }, room=self.room_code)
-
-        # Idem : sans ceci, la mise à jour de l'état (audience_active -> None,
-        # timer relancé) ne serait diffusée aux clients qu'à la prochaine
-        # action de jeu, laissant potentiellement le panneau d'audience
-        # affiché indéfiniment côté client.
-        broadcast_state(self)
 
     def envoyer_audience(self, expediteur_uid: str, message: str) -> tuple[bool, str]:
         if not self.audience_active or not self.audience_active.actif:
@@ -1852,19 +1840,10 @@ def persist(gs: GameState) -> None:
     save_game(gs.room_code, gs.to_dict())
 
 
-def public_state(gs: GameState, viewer_uid: str | None = None) -> dict:
+def public_state(gs: GameState) -> dict:
     d = gs.to_dict()
     if gs.phase == Phase.DECISION:
         d["decisions"] = {role: True for role in gs.decisions}
-    # SÉCURITÉ : les chats privés sont censés être secrets. Sans ce filtre,
-    # to_dict() renvoie la liste complète de tous les chats_prives (avec
-    # l'historique intégral des messages) à TOUT LE MONDE dans le salon,
-    # y compris à des joueurs qui n'en sont pas membres — ce qui annule
-    # entièrement l'intérêt du pouvoir "Canaux Clandestins". On ne garde
-    # ici que les chats dont le destinataire est effectivement membre.
-    d["chats_prives"] = [
-        c for c in d["chats_prives"] if viewer_uid is not None and viewer_uid in c["membres"]
-    ]
     return d
 
 
@@ -1889,8 +1868,8 @@ def roles_catalog() -> dict:
 
 
 def broadcast_state(gs: GameState) -> None:
+    socketio.emit("state_update", public_state(gs), room=gs.room_code)
     for uid, p in gs.players.items():
-        socketio.emit("state_update", public_state(gs, viewer_uid=uid), room=p.sid)
         if p.personal_log:
             socketio.emit("personal_log", {"logs": p.personal_log}, room=p.sid)
     persist(gs)
@@ -2458,7 +2437,6 @@ def on_envoyer_message_prive(data):
     if not ok:
         emit("action_error", {"message": msg})
         return
-    broadcast_state(gs)
 
 
 # ---------- AUDIENCE ROYALE ----------

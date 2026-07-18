@@ -99,6 +99,9 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: 
 .btn-vert:hover:not(:disabled) { background: var(--vert-garde-clair); }
 .btn-fantome { background: transparent; color: var(--encre); border: 1.5px solid var(--ardoise-claire); }
 .btn-fantome:hover:not(:disabled) { background: rgba(91,91,82,0.08); }
+.btn + .btn { margin-left: 0.5rem; }
+@media (max-width: 480px) { .btn + .btn { margin-left: 0; margin-top: 0.3rem; } }
+
 input, textarea, select { font-family: var(--font-body); font-size: 1rem; background: var(--parchemin-clair); border: 1.5px solid var(--parchemin-ombre); border-radius: var(--radius); padding: 0.65em 0.9em; color: var(--encre); }
 input::placeholder, textarea::placeholder { color: var(--ardoise-claire); }
 ::selection { background: var(--or-clair); color: var(--encre); }
@@ -315,6 +318,10 @@ input[type="range"]::-moz-range-thumb {
 #personal-log { font-size: 0.85rem; max-height: 150px; overflow-y: auto; padding-right: 0.3rem; }
 #personal-log div { padding: 0.2rem 0; border-bottom: 1px solid rgba(91,91,82,0.08); }
 
+#chats-prives-container { max-height: 200px; overflow-y: auto; }
+#chats-prives-container .encart-info { cursor: pointer; }
+#chats-prives-container .encart-info:hover { background: rgba(61,92,66,0.15); }
+
 @media (max-width: 720px) {
   .entete-royale { flex-direction: column; align-items: flex-start; }
   .jauges-royaume { width: 100%; justify-content: space-between; }
@@ -340,38 +347,6 @@ input[type="range"]::-moz-range-thumb {
 .tableau-scores th, .tableau-scores td { text-align: left; padding: 0.55em 0.7em; border-bottom: 1px solid var(--parchemin-ombre); font-size: 0.92rem; }
 .tableau-scores th { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ardoise); }
 .tableau-scores tr.vainqueur { background: rgba(184,134,46,0.15); font-weight: 700; }
-/* Espacement des boutons */
-.btn + .btn {
-  margin-left: 0.5rem;
-}
-/* Options de falsification */
-#falsification-options .choix-roi-option {
-    padding: 0.8rem;
-    border: 1.5px solid var(--parchemin-ombre);
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease;
-}
-#falsification-options .choix-roi-option:hover {
-    border-color: var(--or);
-    background: rgba(184,134,46,0.05);
-}
-#falsification-options .choix-roi-option.selectionne {
-    border-color: var(--or);
-    background: rgba(184,134,46,0.12);
-}
-#falsification-options .choix-roi-option input[type="radio"] {
-    margin-right: 0.5rem;
-}
-#falsification-options .choix-roi-option span {
-    display: inline-block;
-}
-@media (max-width: 480px) {
-  .btn + .btn {
-    margin-left: 0;
-    margin-top: 0.3rem;
-  }
-}
 
 /* Style des effets dans les modales */
 .positif {
@@ -395,7 +370,7 @@ input[type="range"]::-moz-range-thumb {
    RESPONSIVE DESIGN  Adaptation mobile/tablette
    ========================================================================== */
 
-/* Mobile (tlphones) */
+/* Mobile (telephones) */
 @media (max-width: 767px) {
   html, body {
     font-size: 16px;
@@ -504,7 +479,7 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* Amliorations gnrales pour le tactile */
+/* Ameliorations generales pour le tactile */
 @media (hover: none) and (pointer: coarse) {
   .btn {
     min-height: 48px;
