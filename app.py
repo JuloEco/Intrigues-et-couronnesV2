@@ -350,16 +350,96 @@ TASK_CATALOG: dict[str, list[dict]] = {
 }
 
 ENTERPRISE_CATALOG: list[dict] = [
-    {"id": "ent1", "nom": "Faire la Guerre", "roles_requis": ["connetable", "finances"],
-     "cout_investissement": 10,
-     "gain": {"or_public": 30, "stabilite": 5, "influence_par_ministre": 3},
-     "perte": {"stabilite": -12, "or_public": -15},
-     "description": "Le Connétable lève les troupes, le Surintendant finance."},
-    {"id": "ent2", "nom": "Grand Traité de Paix", "roles_requis": ["aumonier", "interieur"],
-     "cout_investissement": 8,
-     "gain": {"stabilite": 14, "influence_par_ministre": 2},
-     "perte": {"stabilite": -6},
-     "description": "L'Aumônier bénit l'accord, l'Intérieur en garantit le respect."},
+    {
+        "id": "ent1",
+        "nom": "Faire la Guerre",
+        "roles_requis": ["connetable", "finances"],
+        "cout_investissement": 10,
+        "gain": {"or_public": 30, "stabilite": 5, "influence_par_ministre": 3},
+        "perte": {"stabilite": -12, "or_public": -15},
+        "description": "Le Connétable lève les troupes, le Surintendant finance."
+    },
+    {
+        "id": "ent2",
+        "nom": "Grand Traité de Paix",
+        "roles_requis": ["aumonier", "interieur"],
+        "cout_investissement": 8,
+        "gain": {"stabilite": 14, "influence_par_ministre": 2},
+        "perte": {"stabilite": -6},
+        "description": "L'Aumônier bénit l'accord, l'Intérieur en garantit le respect."
+    },
+    {
+        "id": "ent3",
+        "nom": "Alliance Dynastique",
+        "roles_requis": ["interieur", "finances"],
+        "cout_investissement": 12,
+        "gain": {"or_public": 25, "stabilite": 8, "influence_par_ministre": 4},
+        "perte": {"stabilite": -10, "or_public": -20},
+        "description": "Un mariage royal scelle une alliance lucrative."
+    },
+    {
+        "id": "ent4",
+        "nom": "Grand Chantier Royal",
+        "roles_requis": ["finances", "subsistances"],
+        "cout_investissement": 15,
+        "gain": {"or_public": 40, "stabilite": 5, "influence_par_ministre": 2},
+        "perte": {"stabilite": -15, "or_public": -30},
+        "description": "Construction d'un palais ou d'une cathédrale."
+    },
+    {
+        "id": "ent5",
+        "nom": "Expédition Coloniale",
+        "roles_requis": ["connetable", "subsistances"],
+        "cout_investissement": 14,
+        "gain": {"or_public": 35, "stabilite": 7, "influence_par_ministre": 3},
+        "perte": {"stabilite": -12, "or_public": -25},
+        "description": "Conquête de nouvelles terres pour le Royaume."
+    },
+    {
+        "id": "ent6",
+        "nom": "Fête des Lumières",
+        "roles_requis": ["aumonier", "subsistances"],
+        "cout_investissement": 10,
+        "gain": {"or_public": 20, "stabilite": 10, "influence_par_ministre": 2},
+        "perte": {"stabilite": -8, "or_public": -10},
+        "description": "Célébration fastueuse pour le peuple."
+    },
+    {
+        "id": "ent7",
+        "nom": "Réforme Fiscale",
+        "roles_requis": ["finances"],
+        "cout_investissement": 8,
+        "gain": {"or_public": 25, "stabilite": 3, "influence_par_ministre": 1},
+        "perte": {"stabilite": -5, "or_public": -15},
+        "description": "Optimisation des impôts pour remplir les caisses."
+    },
+    {
+        "id": "ent8",
+        "nom": "Chasse aux Sorcières",
+        "roles_requis": ["aumonier", "connetable"],
+        "cout_investissement": 9,
+        "gain": {"stabilite": 12, "influence_par_ministre": 2},
+        "perte": {"stabilite": -8},
+        "description": "Purge des hérétiques pour rassurer la population."
+    },
+    {
+        "id": "ent9",
+        "nom": "Festival de la Moisson",
+        "roles_requis": ["subsistances"],
+        "cout_investissement": 7,
+        "gain": {"or_public": 15, "stabilite": 6, "influence_par_ministre": 1},
+        "perte": {"stabilite": -5, "or_public": -10},
+        "description": "Célébration des récoltes pour booster le moral."
+    },
+    {
+        "id": "ent10",
+        "nom": "Diplomatie avec le Vatican",
+        "roles_requis": ["aumonier", "interieur"],
+        "cout_investissement": 11,
+        "gain": {"or_public": 20, "stabilite": 9, "influence_par_ministre": 3},
+        "perte": {"stabilite": -10, "or_public": -15},
+        "description": "Négociations pour obtenir des fonds et du soutien spirituel."
+    },
 ]
 ENTERPRISE_BY_ID = {e["id"]: e for e in ENTERPRISE_CATALOG}
 
