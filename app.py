@@ -20,6 +20,8 @@ from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, join_room, emit
 from gevent import monkey
 monkey.patch_all()
+from dotenv import load_dotenv()
+load_dotenv()
 
 # ============================================================================
 # CONFIGURATION
