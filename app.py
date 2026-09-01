@@ -50,7 +50,10 @@ if _USE_POSTGRES:
     try:
         import psycopg2
     except ImportError:
-        import psycopg2_binary as psycopg2
+        try:
+            import psycopg2_binary as psycopg2
+        except ImportError:
+            _USE_POSTGRES = False
 
 SQLITE_PATH = os.environ.get("SQLITE_PATH", os.path.join(os.path.dirname(__file__), "game.db"))
 
