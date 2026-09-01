@@ -5,8 +5,8 @@ Version complète avec tous les pouvoirs spéciaux, audiences royales et chats p
 
 from __future__ import annotations
 
-import eventlet
-eventlet.monkey_patch()
+import gevent import monkey
+monkey.patch_all()
 
 import os
 import json
