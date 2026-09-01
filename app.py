@@ -1913,7 +1913,7 @@ timer_thread.start()
 # ---------- Routes HTTP ----------
 @app.route("/")
 def index():
-    return "<h1>Le serveur Flask fonctionne !</h1>"
+    return render_template("index.html")
 
 
 @app.route("/room/<room_code>")
