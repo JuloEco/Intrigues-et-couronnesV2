@@ -1,7 +1,6 @@
 Flask
 Flask-SocketIO
-gevent
-gevent-websocket
+eventlet
+gunicorn
 python-dotenv
 psycopg2-binary
-gunicorn
