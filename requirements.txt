@@ -1,3 +1,6 @@
 Flask
-flask_socketio
+Flask-SocketIO
 gevent
+gevent-websocket
+python-dotenv
+psycopg2-binary
