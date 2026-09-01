@@ -29,6 +29,1059 @@
 
     <a class="lien-regles" href="{{ url_for('regles_page') }}">📜 Consulter le Livre des Règles</a>
   </div>
+  <!-- ==========================================================================
+     MODALE TUTORIEL (À AJOUTER AVANT LA FERMETURE DE </body>)
+     ========================================================================== -->
+
+<!-- Modale Tutoriel -->
+<div class="voile-modale cachee" id="modale-tutoriel">
+  <div class="boite-modale boite-modale-large">
+    <div class="panneau-titre" style="margin-bottom: 1rem;">
+      <h2 style="display: inline-block;">📜 Tutoriel : Système de Valves</h2>
+      <button class="btn btn-fantome" onclick="fermerModale('modale-tutoriel')" style="float: right; padding: 0.3rem 0.8rem; font-size: 0.9rem;">Fermer</button>
+    </div>
+    
+    <div class="tutoriel-contenu scrollable" style="max-height: 70vh; overflow-y: auto; padding-right: 1rem;">
+      
+      <!-- ==================== INTRODUCTION ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎯 1. Introduction au Système de Valves</h3>
+        <p>
+          Dans <strong>Intrigues & Couronnes</strong>, vous incarnez un ministre à la cour du Roi-Soleil. 
+          Votre but est d'accumuler de la <strong>Puissance Politique</strong> tout en évitant que le Royaume ne sombre dans le chaos.
+        </p>
+        <p>
+          Le <strong>système de valves</strong> remplace l'ancien système de robinets par un <strong>système à 3 axes</strong> 
+          qui reflète mieux les dilemmes moraux d'un ministre :
+        </p>
+        <ul>
+          <li><strong>🔵 Loyauté</strong> : Votre dévouement au Roi et au Royaume.</li>
+          <li><strong>🟢 Efficacité</strong> : Votre compétence à gérer votre ministère.</li>
+          <li><strong>🟣 Corruption</strong> : Votre tendance à profiter de votre position pour vous enrichir.</li>
+        </ul>
+        <p><strong>⚠️ La somme des 3 valves doit toujours faire 100%.</strong></p>
+      </div>
+
+      <!-- ==================== LES 3 AXES ==================== -->
+      <div class="tutoriel-section">
+        <h3>📌 2. Les 3 Axes (Valves)</h3>
+        
+        <div class="tutoriel-sous-section">
+          <h4>🔵 Loyauté (0-100%)</h4>
+          <p><em>"Jusqu'où iriez-vous pour servir le Roi ?"</em></p>
+          <p><strong>Effets positifs :</strong></p>
+          <ul>
+            <li>Réduit le <strong>risque de démasquage</strong> (-1% par point de Loyauté).</li>
+            <li>Améliore votre <strong>Réputation</strong> (visible par tous).</li>
+            <li>Débloque des <strong>actions "nobles"</strong> (ex: "Bénir un Décret").</li>
+            <li>Protège contre les <strong>révocations</strong>.</li>
+          </ul>
+          <p><strong>Effets négatifs :</strong></p>
+          <ul>
+            <li>Moins de <strong>gains personnels</strong> (Or perso, Influence).</li>
+          </ul>
+          <p><strong>Seuils importants :</strong></p>
+          <table class="tutoriel-tableau">
+            <tr><th>Seuil</th><th>Effet</th></tr>
+            <tr><td>> 80%</td><td><strong>Immunité contre le démasquage</strong> pendant 1 cycle.</td></tr>
+            <tr><td>< 20%</td><td>Le Roi peut <strong>vous révoquer sans coût</strong>.</td></tr>
+          </table>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🟢 Efficacité (0-100%)</h4>
+          <p><em>"Êtes-vous un ministre compétent ?"</em></p>
+          <p><strong>Effets positifs :</strong></p>
+          <ul>
+            <li>Améliore les <strong>gains pour le Royaume</strong> (Stabilité, Or public).</li>
+            <li>Débloque des <strong>actions "administratives"</strong>.</li>
+            <li>Augmente votre <strong>Prestige de Cour</strong>.</li>
+          </ul>
+          <p><strong>Effets négatifs :</strong></p>
+          <ul>
+            <li>Moins de <strong>gains personnels</strong>.</li>
+            <li>Peut attirer la <strong>jalousie</strong> des autres ministres.</li>
+          </ul>
+          <p><strong>Seuils importants :</strong></p>
+          <table class="tutoriel-tableau">
+            <tr><th>Seuil</th><th>Effet</th></tr>
+            <tr><td>> 70%</td><td>Débloque une <strong>action spéciale</strong>.</td></tr>
+            <tr><td>< 30%</td><td>Effets <strong>réduits de 50%</strong>.</td></tr>
+          </table>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🟣 Corruption (0-100%)</h4>
+          <p><em>"Jusqu'où iriez-vous pour vous enrichir ?"</em></p>
+          <p><strong>Effets positifs :</strong></p>
+          <ul>
+            <li>Augmente vos <strong>gains personnels</strong> (Or perso, Influence).</li>
+            <li>Débloque des <strong>actions "illégales"</strong>.</li>
+            <li>Permet d'<strong>emprunter de l'Or public</strong>.</li>
+          </ul>
+          <p><strong>Effets négatifs :</strong></p>
+          <ul>
+            <li>Augmente le <strong>risque de démasquage</strong>.</li>
+            <li>Détériore votre <strong>Réputation</strong>.</li>
+          </ul>
+          <p><strong>Seuils importants :</strong></p>
+          <table class="tutoriel-tableau">
+            <tr><th>Seuil</th><th>Effet</th></tr>
+            <tr><td>> 50%</td><td>Débloque des <strong>actions corrompues</strong>.</td></tr>
+            <tr><td>> 60%</td><td><strong>+1% de risque par point</strong> au-dessus de 60.</td></tr>
+            <tr><td>> 80%</td><td><strong>Risque de démasquage ×2</strong>.</td></tr>
+            <tr><td>50-60%</td><td>Peut <strong>voler 5 Or à un rival</strong>.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==================== COMMENT UTILISER ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎮 3. Comment Utiliser les Valves ?</h3>
+        <p>
+          À chaque <strong>phase de décision</strong>, vous verrez un panneau de contrôle des valves :
+        </p>
+        
+        <div class="tutoriel-exemple">
+          <div class="valves-exemple">
+            <div class="valve">
+              <label>🔵 Loyauté: <span>40%</span></label>
+              <div class="valve-bar"><div class="valve-fill" style="width: 40%;"></div></div>
+            </div>
+            <div class="valve">
+              <label>🟢 Efficacité: <span>30%</span></label>
+              <div class="valve-bar"><div class="valve-fill" style="width: 30%; background: #7bbf6a;"></div></div>
+            </div>
+            <div class="valve">
+              <label>🟣 Corruption: <span>30%</span></label>
+              <div class="valve-bar"><div class="valve-fill" style="width: 30%; background: #c46a6a;"></div></div>
+            </div>
+            <p style="text-align: center; margin-top: 0.5rem;"><strong>Total: 100%</strong></p>
+          </div>
+        </div>
+        
+        <p><strong>Comment faire :</strong></p>
+        <ol>
+          <li>Utilisez les <strong>curseurs</strong> pour répartir vos 100% entre les 3 valves.</li>
+          <li>La somme doit <strong>toujours faire 100%</strong> (le système ajuste automatiquement).</li>
+          <li>Validez avec le bouton <strong>"Valider"</strong>.</li>
+          <li>Choisissez une <strong>action spéciale</strong> (si disponible) avant de valider.</li>
+        </ol>
+        
+        <p><strong>Conseils pour répartir vos valves :</strong></p>
+        <table class="tutoriel-tableau">
+          <tr><th>Stratégie</th><th>Loyauté</th><th>Efficacité</th><th>Corruption</th><th>Avantages</th><th>Risques</th></tr>
+          <tr><td><strong>Loyaliste</strong></td><td>70%</td><td>20%</td><td>10%</td><td>Risque de démasquage très faible</td><td>Peu de gains personnels</td></tr>
+          <tr><td><strong>Équilibré</strong></td><td>40%</td><td>30%</td><td>30%</td><td>Bon compromis</td><td>Risque modéré</td></tr>
+          <tr><td><strong>Corrompu</strong></td><td>10%</td><td>20%</td><td>70%</td><td>Gains personnels élevés</td><td>Risque de démasquage très élevé</td></tr>
+          <tr><td><strong>Administrateur</strong></td><td>30%</td><td>60%</td><td>10%</td><td>Maximise les gains pour le Royaume</td><td>Peu de gains personnels</td></tr>
+        </table>
+      </div>
+
+      <!-- ==================== EFFETS PAR RÔLE ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎭 4. Effets des Valves par Rôle</h3>
+        
+        <div class="tutoriel-sous-section">
+          <h4>📜 Ministre de l'Intérieur</h4>
+          <p><strong>Flux :</strong> Gère la sécurité publique et la stabilité.</p>
+          <p><strong>Effets :</strong></p>
+          <ul>
+            <li>Loyauté : -1% de risque de démasquage par point.</li>
+            <li>Efficacité : +0.02 Stabilité par point.</li>
+            <li>Corruption : +0.15 Or perso par point.</li>
+          </ul>
+          <p><strong>Actions Spéciales :</strong></p>
+          <ul>
+            <li><strong>Falsifier un Rapport</strong> (Corruption > 50%) : Modifie les chiffres de la carte de crise (coût : 5 Or perso, risque : +10%).</li>
+            <li><strong>Lancer une Rumeur</strong> (Corruption > 70%) : -5 Stabilité pour un ministre cible (coût : 10 Or perso, risque : +20%).</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>💰 Surintendant des Finances</h4>
+          <p><strong>Flux :</strong> Gère le trésor public et l'économie du Royaume.</p>
+          <p><strong>Effets :</strong></p>
+          <ul>
+            <li>Loyauté : -1% de risque de démasquage par point.</li>
+            <li>Efficacité : +0.05 Or public par point.</li>
+            <li>Corruption : +0.20 Or perso par point.</li>
+          </ul>
+          <p><strong>Actions Spéciales :</strong></p>
+          <ul>
+            <li><strong>Blanchir de l'Or</strong> (Corruption > 60%) : +30 Or public, -10 Stabilité (coût : 20 Or perso, risque : +15%).</li>
+            <li><strong>Acheter un Vote</strong> (Efficacité > 50%) : Force un ministre à voter pour votre décret (coût : 15 Or perso).</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>⛪ Grand Aumônier</h4>
+          <p><strong>Flux :</strong> Garant de la foi, de la morale et de la légitimité divine.</p>
+          <p><strong>Effets :</strong></p>
+          <ul>
+            <li>Loyauté : -1% de risque de démasquage par point.</li>
+            <li>Efficacité : +0.03 Stabilité par point.</li>
+            <li>Corruption : +0.10 Or perso par point.</li>
+          </ul>
+          <p><strong>Actions Spéciales :</strong></p>
+          <ul>
+            <li><strong>Bénir un Décret</strong> (Loyauté > 60%) : +5 Stabilité si le décret passe (coût : 10 Influence).</li>
+            <li><strong>Maudire un Rival</strong> (Corruption > 40%) : -3 Stabilité pour un ministre cible, -5 Réputation (coût : 5 Or perso + 5 Influence, risque : +10%).</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🌾 Grand Maître des Subsistances</h4>
+          <p><strong>Flux :</strong> Gère les récoltes, les marchés et la colère de la rue.</p>
+          <p><strong>Effets :</strong></p>
+          <ul>
+            <li>Loyauté : -1% de risque de démasquage par point.</li>
+            <li>Efficacité : +0.04 Or public + 0.01 Stabilité par point.</li>
+            <li>Corruption : +0.15 Or perso par point.</li>
+          </ul>
+          <p><strong>Actions Spéciales :</strong></p>
+          <ul>
+            <li><strong>Spéculer sur le Grain</strong> (Corruption > 50%) : +20 Or perso, -8 Stabilité (coût : 10 Or perso, risque : +15%).</li>
+            <li><strong>Distribuer des Vivres</strong> (Efficacité > 60%) : +10 Stabilité, +5 Réputation (coût : 15 Or public).</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🛡️ Connétable</h4>
+          <p><strong>Flux :</strong> Chef des armées et de la maréchaussée.</p>
+          <p><strong>Effets :</strong></p>
+          <ul>
+            <li>Loyauté : -1% de risque de démasquage par point.</li>
+            <li>Efficacité : +0.03 Stabilité par point.</li>
+            <li>Corruption : +0.15 Or perso par point.</li>
+          </ul>
+          <p><strong>Actions Spéciales :</strong></p>
+          <ul>
+            <li><strong>Arrêter un Ministre</strong> (Efficacité > 70%) : Empêche un ministre de jouer pendant 1 cycle (coût : 10 Influence, risque : +10%).</li>
+            <li><strong>Protéger un Allié</strong> (Loyauté > 50%) : Réduit de 50% le risque de démasquage pour un allié (coût : 5 Or perso).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== RÉPUTATION ==================== -->
+      <div class="tutoriel-section">
+        <h3>📊 5. Système de Réputation</h3>
+        <p>
+          Votre <strong>Réputation</strong> (0-100%) est <strong>visible par tous les joueurs</strong> 
+          et reflète votre image à la cour.
+        </p>
+        <p><strong>Réputation > 70%</strong> : Vous êtes respecté, les autres ministres veulent s'allier avec vous.</p>
+        <p><strong>Réputation < 30%</strong> : Vous êtes méprisé, les autres ministres peuvent vous dénoncer.</p>
+        
+        <p><strong>Comment gagner/perdre de la Réputation ?</strong></p>
+        <table class="tutoriel-tableau">
+          <tr><th>Action</th><th>Effet</th></tr>
+          <tr><td>Augmenter la Loyauté</td><td>+0.1 par point</td></tr>
+          <tr><td>Augmenter la Corruption</td><td>-0.1 par point</td></tr>
+          <tr><td>Ouvrir son robinet (Loyauté > 50%)</td><td>+5</td></tr>
+          <tr><td>Fermer son robinet (Corruption > 50%)</td><td>-10</td></tr>
+          <tr><td>Être démasqué</td><td>-30</td></tr>
+          <tr><td>Utiliser une action "loyale"</td><td>+10</td></tr>
+          <tr><td>Utiliser une action "corrompue"</td><td>-15</td></tr>
+        </table>
+        
+        <p><strong>Effets de la Réputation :</strong></p>
+        <table class="tutoriel-tableau">
+          <tr><th>Réputation</th><th>Effet</th></tr>
+          <tr><td>> 80%</td><td>Immunité contre les dénonciations pendant 1 cycle.</td></tr>
+          <tr><td>> 70%</td><td>Les autres ministres peuvent vous proposer des alliances.</td></tr>
+          <tr><td>< 50%</td><td>Risque accru de dénonciation (+5% par point en dessous de 50%).</td></tr>
+          <tr><td>< 30%</td><td>Le Roi peut vous révoquer sans coût.</td></tr>
+        </table>
+      </div>
+
+      <!-- ==================== ACTIONS SPÉCIALES ==================== -->
+      <div class="tutoriel-section">
+        <h3>⚡ 6. Actions Spéciales Déblocables</h3>
+        <p>
+          Voici la liste complète des actions spéciales disponibles selon vos valves :
+        </p>
+        
+        <table class="tutoriel-tableau">
+          <tr><th>Rôle</th><th>Action</th><th>Condition</th><th>Coût</th><th>Effet</th><th>Risque</th></tr>
+          <tr><td>Intérieur</td><td>Falsifier un Rapport</td><td>Corruption > 50%</td><td>5 Or perso</td><td>Modifie les chiffres de la carte de crise</td><td>+10%</td></tr>
+          <tr><td>Intérieur</td><td>Lancer une Rumeur</td><td>Corruption > 70%</td><td>10 Or perso</td><td>-5 Stabilité pour un ministre</td><td>+20%</td></tr>
+          <tr><td>Finances</td><td>Blanchir de l'Or</td><td>Corruption > 60%</td><td>20 Or perso</td><td>+30 Or public, -10 Stabilité</td><td>+15%</td></tr>
+          <tr><td>Finances</td><td>Acheter un Vote</td><td>Efficacité > 50%</td><td>15 Or perso</td><td>Force un ministre à voter pour votre décret</td><td>Aucun</td></tr>
+          <tr><td>Aumônier</td><td>Bénir un Décret</td><td>Loyauté > 60%</td><td>10 Influence</td><td>+5 Stabilité si le décret passe</td><td>Aucun</td></tr>
+          <tr><td>Aumônier</td><td>Maudire un Rival</td><td>Corruption > 40%</td><td>5 Or perso + 5 Influence</td><td>-3 Stabilité pour un ministre, -5 Réputation</td><td>+10%</td></tr>
+          <tr><td>Subsistances</td><td>Spéculer sur le Grain</td><td>Corruption > 50%</td><td>10 Or perso</td><td>+20 Or perso, -8 Stabilité</td><td>+15%</td></tr>
+          <tr><td>Subsistances</td><td>Distribuer des Vivres</td><td>Efficacité > 60%</td><td>15 Or public</td><td>+10 Stabilité, +5 Réputation</td><td>Aucun</td></tr>
+          <tr><td>Connétable</td><td>Arrêter un Ministre</td><td>Efficacité > 70%</td><td>10 Influence</td><td>Empêche un ministre de jouer 1 cycle</td><td>+10%</td></tr>
+          <tr><td>Connétable</td><td>Protéger un Allié</td><td>Loyauté > 50%</td><td>5 Or perso</td><td>Réduit de 50% le risque de démasquage pour un allié</td><td>Aucun</td></tr>
+        </table>
+      </div>
+
+      <!-- ==================== DETTES ==================== -->
+      <div class="tutoriel-section">
+        <h3>💰 7. Système de Dettes</h3>
+        <p>
+          Si votre <strong>Corruption > 50%</strong>, vous <strong>empruntez automatiquement 10 Or public</strong> 
+          à chaque cycle.
+        </p>
+        <p><strong>Effets :</strong></p>
+        <ul>
+          <li>+10 Or public (immédiat).</li>
+          <li>Dette enregistrée : Vous devez <strong>rembourser 10 Or public</strong> à la fin du cycle.</li>
+        </ul>
+        <p><strong>Si vous ne pouvez pas rembourser :</strong></p>
+        <ul>
+          <li><strong>Ruine collective</strong> : Le Royaume s'effondre, tous les joueurs perdent.</li>
+          <li><strong>Pénalité</strong> : Vous perdez <strong>5 Réputation</strong>.</li>
+        </ul>
+      </div>
+
+      <!-- ==================== SEUILS ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎯 8. Seuils et Effets Spéciaux</h3>
+        <p>
+          Voici les seuils qui déclenchent des effets spéciaux :
+        </p>
+        <table class="tutoriel-tableau">
+          <tr><th>Valve</th><th>Seuil</th><th>Effet</th></tr>
+          <tr><td>Loyauté</td><td>> 80%</td><td>Immunité contre le démasquage pendant 1 cycle.</td></tr>
+          <tr><td>Loyauté</td><td>< 20%</td><td>Le Roi peut vous révoquer sans coût.</td></tr>
+          <tr><td>Efficacité</td><td>> 70%</td><td>Débloque une action spéciale.</td></tr>
+          <tr><td>Efficacité</td><td>< 30%</td><td>Effets réduits de 50%.</td></tr>
+          <tr><td>Corruption</td><td>> 50%</td><td>Emprunte 10 Or public.</td></tr>
+          <tr><td>Corruption</td><td>> 60%</td><td>+1% de risque de démasquage par point au-dessus de 60.</td></tr>
+          <tr><td>Corruption</td><td>> 80%</td><td>Risque de démasquage ×2.</td></tr>
+        </table>
+        
+        <p><strong>Risque de démasquage :</strong></p>
+        <ul>
+          <li><strong>Base</strong> : 30% (si Corruption = 0%).</li>
+          <li><strong>+1% par point de Corruption</strong> (ex: Corruption = 50% → 30% + 50% = 80%).</li>
+          <li><strong>+10% si Corruption > 60%</strong> (ex: Corruption = 70% → 30% + 70% + 10% = 110% → 100%).</li>
+          <li><strong>×2 si Corruption > 80%</strong> (ex: Corruption = 90% → 30% + 90% + 10% = 130% → 130% × 2 = 260% → 100%).</li>
+        </ul>
+        <p><strong>⚠️ Si votre risque dépasse 100%, vous êtes démasqué automatiquement !</strong></p>
+      </div>
+
+      <!-- ==================== EFFETS DE GROUPE ==================== -->
+      <div class="tutoriel-section">
+        <h3>👥 9. Effets de Groupe</h3>
+        <p>
+          Les valves de tous les ministres ont un impact sur le Royaume :
+        </p>
+        <p><strong>Moyenne de Loyauté < 40%</strong> :</p>
+        <ul>
+          <li><strong>-5 Stabilité</strong> à chaque cycle (le Roi perd confiance).</li>
+        </ul>
+        <p><strong>Moyenne de Corruption > 60%</strong> :</p>
+        <ul>
+          <li><strong>+10% de risque de démasquage pour tous</strong> (la cour est trop corrompue).</li>
+        </ul>
+        <p><strong>Interactions entre ministres :</strong></p>
+        <ul>
+          <li><strong>Alliances</strong> : Si deux ministres ont Loyauté > 50%, ils peuvent partager des informations.</li>
+          <li><strong>Dénonciations</strong> : Un ministre loyal (Loyauté > 70%) peut dénoncer un ministre corrompu (Corruption > 70%).</li>
+          <li><strong>Chantage</strong> : Un ministre corrompu (Corruption > 60%) peut faire chanter un ministre loyal.</li>
+        </ul>
+      </div>
+
+      <!-- ==================== STRATÉGIES ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎮 10. Stratégies Recommandées</h3>
+        
+        <div class="tutoriel-sous-section">
+          <h4>🏆 Stratégie 1 : Le Loyaliste (Sécurité avant tout)</h4>
+          <p><strong>Objectif :</strong> Minimiser le risque de démasquage et survivre jusqu'à la fin.</p>
+          <table class="tutoriel-tableau">
+            <tr><th>Valve</th><th>Valeur</th><th>Avantages</th><th>Risques</th></tr>
+            <tr><td>Loyauté</td><td>70%</td><td>Risque de démasquage très faible</td><td>Peu de gains personnels</td></tr>
+            <tr><td>Efficacité</td><td>20%</td><td>Gains modestes pour le Royaume</td><td>Aucun</td></tr>
+            <tr><td>Corruption</td><td>10%</td><td>Aucun</td><td>Aucun</td></tr>
+          </table>
+          <p><strong>Actions recommandées :</strong></p>
+          <ul>
+            <li>Bénir un Décret (si Aumônier).</li>
+            <li>Protéger un Allié (si Connétable).</li>
+            <li>Éviter les actions corrompues.</li>
+          </ul>
+          <p><strong>Résultat :</strong> Faible Puissance finale, mais peu de risques.</p>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>⚖️ Stratégie 2 : L'Équilibré (Compromis parfait)</h4>
+          <p><strong>Objectif :</strong> Trouver un bon équilibre entre gains et sécurité.</p>
+          <table class="tutoriel-tableau">
+            <tr><th>Valve</th><th>Valeur</th><th>Avantages</th><th>Risques</th></tr>
+            <tr><td>Loyauté</td><td>40%</td><td>Risque de démasquage modéré</td><td>Aucun</td></tr>
+            <tr><td>Efficacité</td><td>30%</td><td>Gains corrects pour le Royaume</td><td>Aucun</td></tr>
+            <tr><td>Corruption</td><td>30%</td><td>Gains personnels corrects</td><td>Risque modéré</td></tr>
+          </table>
+          <p><strong>Actions recommandées :</strong></p>
+          <ul>
+            <li>Falsifier un Rapport (si Intérieur et carte de crise très négative).</li>
+            <li>Blanchir de l'Or (si Finances et Or public très bas).</li>
+            <li>Coopérer avec d'autres ministres.</li>
+          </ul>
+          <p><strong>Résultat :</strong> Puissance finale moyenne, risque modéré.</p>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>💰 Stratégie 3 : Le Corrompu (Tout pour l'Or)</h4>
+          <p><strong>Objectif :</strong> Maximiser vos gains personnels, même au prix de la stabilité.</p>
+          <table class="tutoriel-tableau">
+            <tr><th>Valve</th><th>Valeur</th><th>Avantages</th><th>Risques</th></tr>
+            <tr><td>Loyauté</td><td>10%</td><td>Aucun</td><td>Risque de démasquage très élevé</td></tr>
+            <tr><td>Efficacité</td><td>20%</td><td>Peu de gains pour le Royaume</td><td>Aucun</td></tr>
+            <tr><td>Corruption</td><td>70%</td><td>Gains personnels élevés</td><td>Risque de démasquage très élevé</td></tr>
+          </table>
+          <p><strong>Actions recommandées :</strong></p>
+          <ul>
+            <li>Falsifier un Rapport (à chaque cycle).</li>
+            <li>Blanchir de l'Or (si possible).</li>
+            <li>Lancer des Rumeurs contre les autres ministres.</li>
+            <li>Voler de l'Or à vos rivaux.</li>
+          </ul>
+          <p><strong>Résultat :</strong> Puissance finale élevée, mais risque de ruine collective.</p>
+          <p class="encart-avertissement"><strong>⚠️ Attention :</strong> Cette stratégie peut faire perdre tout le monde si le Royaume s'effondre !</p>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🏛️ Stratégie 4 : L'Administrateur (Pour le Royaume)</h4>
+          <p><strong>Objectif :</strong> Maximiser les gains pour le Royaume et éviter la ruine collective.</p>
+          <table class="tutoriel-tableau">
+            <tr><th>Valve</th><th>Valeur</th><th>Avantages</th><th>Risques</th></tr>
+            <tr><td>Loyauté</td><td>30%</td><td>Risque de démasquage modéré</td><td>Peu de gains personnels</td></tr>
+            <tr><td>Efficacité</td><td>60%</td><td>Gains élevés pour le Royaume</td><td>Aucun</td></tr>
+            <tr><td>Corruption</td><td>10%</td><td>Aucun</td><td>Aucun</td></tr>
+          </table>
+          <p><strong>Actions recommandées :</strong></p>
+          <ul>
+            <li>Proposer des Décrets pour améliorer la Stabilité/Or public.</li>
+            <li>Bénir un Décret (si Aumônier).</li>
+            <li>Distribuer des Vivres (si Subsistances).</li>
+            <li>Coopérer avec les autres ministres.</li>
+          </ul>
+          <p><strong>Résultat :</strong> Puissance finale moyenne, mais le Royaume survit.</p>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🔄 Stratégie 5 : L'Opportuniste (Adaptation constante)</h4>
+          <p><strong>Objectif :</strong> S'adapter en fonction de la situation.</p>
+          <table class="tutoriel-tableau">
+            <tr><th>Situation</th><th>Stratégie</th></tr>
+            <tr><td>Stabilité > 70</td><td>Augmenter la Corruption pour gagner de l'Or.</td></tr>
+            <tr><td>Stabilité < 40</td><td>Augmenter l'Efficacité pour stabiliser le Royaume.</td></tr>
+            <tr><td>Or public < 30</td><td>Augmenter l'Efficacité (Finances) ou Blanchir de l'Or.</td></tr>
+            <tr><td>Risque de démasquage > 50%</td><td>Augmenter la Loyauté pour réduire le risque.</td></tr>
+            <tr><td>Réputation < 50%</td><td>Augmenter la Loyauté et éviter les actions corrompues.</td></tr>
+          </table>
+          <p><strong>Résultat :</strong> Puissance finale variable, mais flexibilité maximale.</p>
+        </div>
+      </div>
+
+      <!-- ==================== EXEMPLE DE PARTIE ==================== -->
+      <div class="tutoriel-section">
+        <h3>🎲 11. Exemple de Partie</h3>
+        <p><strong>Contexte :</strong> Cycle 1/8, Stabilité = 70, Or public = 100.</p>
+        <p><strong>Joueurs :</strong> Roi + 3 ministres (Intérieur, Finances, Aumônier).</p>
+        
+        <div class="tutoriel-sous-section">
+          <h4>💬 Phase de Discussion (55s)</h4>
+          <ul>
+            <li><strong>Alice (Intérieur)</strong> :
+              <ul>
+                <li>Valves : Loyauté 40%, Efficacité 30%, Corruption 30%.</li>
+                <li>Objectif : Augmenter la Corruption à 50% pour débloquer <strong>"Falsifier un Rapport"</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>Bob (Finances)</strong> :
+              <ul>
+                <li>Valves : Loyauté 20%, Efficacité 30%, Corruption 50%.</li>
+                <li>Objectif : Augmenter la Corruption à 60% pour débloquer <strong>"Blanchir de l'Or"</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>Charlie (Aumônier)</strong> :
+              <ul>
+                <li>Valves : Loyauté 60%, Efficacité 20%, Corruption 20%.</li>
+                <li>Action : <strong>"Bénir un Décret"</strong> (Loyauté > 60% → débloqué).</li>
+                <li>Propose un décret : <strong>"Fête Religieuse"</strong> (coût : 10 Or public, effet : +8 Stabilité).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🔒 Phase de Décision</h4>
+          <ul>
+            <li><strong>Alice (Intérieur)</strong> :
+              <ul>
+                <li>Valves finales : Loyauté 30%, Efficacité 20%, Corruption <strong>50%</strong>.</li>
+                <li>Action : <strong>Falsifier un Rapport</strong> (coût : 5 Or perso, risque : +10%).</li>
+              </ul>
+            </li>
+            <li><strong>Bob (Finances)</strong> :
+              <ul>
+                <li>Valves finales : Loyauté 10%, Efficacité 30%, Corruption <strong>60%</strong>.</li>
+                <li>Action : <strong>Blanchir de l'Or</strong> (coût : 20 Or perso, risque : +15%).</li>
+              </ul>
+            </li>
+            <li><strong>Charlie (Aumônier)</strong> :
+              <ul>
+                <li>Valves finales : Loyauté <strong>60%</strong>, Efficacité 20%, Corruption 20%.</li>
+                <li>Action : <strong>Bénir un Décret</strong> (coût : 10 Influence).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>📜 Phase de Rapport</h4>
+          <ul>
+            <li>Alice pioche une carte : <strong>"Épidémie de fièvre"</strong> (Stabilité <strong>-10</strong>, Or public <strong>-12</strong>).</li>
+            <li>Elle falsifie le rapport : annonce <strong>-5 Stabilité, -5 Or public</strong>.</li>
+            <li><strong>Effet réel</strong> : Stabilité = 70 - 10 = <strong>60</strong>, Or public = 100 - 12 = <strong>88</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>✅ Phase de Résolution</h4>
+          <p><strong>Effets des valves :</strong></p>
+          <ul>
+            <li><strong>Alice (Intérieur)</strong> :
+              <ul>
+                <li>Loyauté 30% → -3% risque de démasquage (base 30% → 27%).</li>
+                <li>Efficacité 20% → +0.02 × 20 = +0.4 Stabilité (arrondi à 0).</li>
+                <li>Corruption 50% → +0.15 × 50 = +7.5 Or perso (arrondi à 8).</li>
+                <li>Action <strong>Falsifier un Rapport</strong> → +10% risque (27% → 37%).</li>
+                <li><strong>Dette</strong> : Corruption > 50% → emprunt de 10 Or public (Or public = 88 + 10 = 98, Dette = 10).</li>
+              </ul>
+            </li>
+            <li><strong>Bob (Finances)</strong> :
+              <ul>
+                <li>Loyauté 10% → -1% risque (base 30% → 29%).</li>
+                <li>Efficacité 30% → +0.05 × 30 = +1.5 Or public (arrondi à 2).</li>
+                <li>Corruption 60% → +0.20 × 60 = +12 Or perso.</li>
+                <li>Action <strong>Blanchir de l'Or</strong> → +15% risque (29% → 44%), <strong>+30 Or public</strong>, <strong>-10 Stabilité</strong>.</li>
+                <li>Or public = 98 + 30 = <strong>128</strong>, Stabilité = 60 - 10 = <strong>50</strong>.</li>
+                <li><strong>Dette</strong> : Corruption > 50% → emprunt de 10 Or public (Or public = 128 + 10 = 138, Dette = 10).</li>
+              </ul>
+            </li>
+            <li><strong>Charlie (Aumônier)</strong> :
+              <ul>
+                <li>Loyauté 60% → -6% risque (base 30% → 24%).</li>
+                <li>Efficacité 20% → +0.03 × 20 = +0.6 Stabilité (arrondi à 1).</li>
+                <li>Corruption 20% → +0.10 × 20 = +2 Or perso.</li>
+                <li>Action <strong>Bénir un Décret</strong> → <strong>+5 Stabilité</strong> (si décret adopté).</li>
+              </ul>
+            </li>
+          </ul>
+          
+          <p><strong>Effet du décret "Fête Religieuse" :</strong></p>
+          <ul>
+            <li>Coût : 10 Or public → Or public = 138 - 10 = <strong>128</strong>.</li>
+            <li>Effet : +8 Stabilité → Stabilité = 50 + 8 = <strong>58</strong>.</li>
+            <li><strong>Bénédiction</strong> : +5 Stabilité → Stabilité = 58 + 5 = <strong>63</strong>.</li>
+          </ul>
+          
+          <p><strong>Remboursement des dettes :</strong></p>
+          <ul>
+            <li>Alice : Dette = 10 → Or public = 128 - 10 = <strong>118</strong>.</li>
+            <li>Bob : Dette = 10 → Or public = 118 - 10 = <strong>108</strong>.</li>
+          </ul>
+          
+          <p><strong>Risque de démasquage :</strong></p>
+          <ul>
+            <li><strong>Alice</strong> : 37% → <strong>Lancé de dé : 1-2 = démasquée</strong> (37% ≈ 2/6 sur un dé à 6 faces).
+              <ul>
+                <li><strong>Sanction</strong> : -10 Or perso, -10 Réputation, -5 Stabilité (63 → 58).</li>
+                <li><strong>Lettre de Cachet</strong> pour le Roi.</li>
+              </ul>
+            </li>
+            <li><strong>Bob</strong> : 44% → <strong>Lancé de dé : 1-3 = pas démasqué</strong> (44% ≈ 3/6).</li>
+            <li><strong>Charlie</strong> : 24% → <strong>Lancé de dé : 1-2 = pas démasqué</strong> (24% ≈ 1/6).</li>
+          </ul>
+        </div>
+
+        <div class="tutoriel-sous-section">
+          <h4>🏁 Fin du Cycle 1</h4>
+          <ul>
+            <li><strong>Stabilité finale</strong> : 58.</li>
+            <li><strong>Or public final</strong> : 108.</li>
+            <li><strong>Réputations</strong> :
+              <ul>
+                <li>Alice : -10 (démasquage) → <strong>40%</strong>.</li>
+                <li>Bob : 0 → <strong>50%</strong>.</li>
+                <li>Charlie : +10 (action loyale) → <strong>60%</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>Dettes</strong> :
+              <ul>
+                <li>Alice : 0 (remboursée).</li>
+                <li>Bob : 0 (remboursée).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ==================== FAQ ==================== -->
+      <div class="tutoriel-section">
+        <h3>❓ 12. FAQ (Foire Aux Questions)</h3>
+        
+        <div class="tutoriel-faq">
+          <div class="tutoriel-faq-item">
+            <h4>❓ Pourquoi mes valves doivent-elles faire 100% ?</h4>
+            <p><strong>→</strong> Pour représenter votre équilibre moral : vous ne pouvez pas être à la fois 100% loyal et 100% corrompu. La somme à 100% force un choix stratégique.</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Que se passe-t-il si je ne valide pas mes valves ?</h4>
+            <p><strong>→</strong> Le jeu utilisera vos valves du cycle précédent. Si c'est votre premier cycle, des valves par défaut (33%/33%/33%) seront appliquées.</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Puis-je changer mes valves en cours de cycle ?</h4>
+            <p><strong>→</strong> Non, les valves sont verrouillées pendant la phase de résolution. Vous devez attendre le prochain cycle pour les ajuster.</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Comment savoir quelles actions spéciales sont disponibles ?</h4>
+            <p><strong>→</strong> Les actions disponibles s'affichent automatiquement dans l'interface si vos valves dépassent les seuils requis.</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Que se passe-t-il si je suis démasqué ?</h4>
+            <p><strong>→</strong> Sanctions :
+              <ul>
+                <li>-50% de votre Or personnel (arrondi à l'entier inférieur).</li>
+                <li>-10 Réputation.</li>
+                <li>-5 Stabilité pour le Royaume.</li>
+                <li>Lettre de Cachet pour le Roi (1 révocation bonus).</li>
+              </ul>
+            </p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Comment éviter d'être démasqué ?</h4>
+            <p><strong>→</strong> Conseils :
+              <ul>
+                <li>Augmentez votre <strong>Loyauté</strong> (réduit le risque de -1% par point).</li>
+                <li>Évitez la <strong>Corruption > 60%</strong> (risque de démasquage exponentiel).</li>
+                <li>Utilisez des actions <strong>"Protéger un Allié"</strong> (Connétable) pour réduire le risque.</li>
+                <li>Coopérez avec le Connétable : s'il a une Loyauté > 50%, le risque de démasquage baisse pour tout le monde.</li>
+              </ul>
+            </p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Que faire si le Royaume est en ruine ?</h4>
+            <p><strong>→</strong> Ruine collective = Stabilité ≤ 0 ou Or public < 0. <strong>Tous les joueurs perdent</strong> la partie.</p>
+            <p><strong>Solution :</strong> Coopérez pour éviter cette situation (ex: augmentez l'Efficacité pour stabiliser le Royaume).</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Comment gagner la partie ?</h4>
+            <p><strong>→</strong> Calcul de la Puissance Politique :</p>
+            <pre style="background: var(--parchemin); padding: 0.5rem; border-radius: var(--radius); overflow-x: auto;">Puissance = Or Personnel + Influence + Prestige de Cour + (Statut de Ministère × 10) + (Stabilité Finale ÷ 2) - (12 × Démasquages subis)</pre>
+            <p><strong>Statut de Ministère :</strong></p>
+            <ul>
+              <li>Intérieur/Aumônier : <strong>2</strong>.</li>
+              <li>Finances : <strong>3</strong>.</li>
+              <li>Subsistances/Connétable : <strong>1</strong>.</li>
+            </ul>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Puis-je voir les valves des autres ministres ?</h4>
+            <p><strong>→</strong> Non, les valves sont <strong>secrètes</strong>. Seule la Réputation est visible.</p>
+          </div>
+          
+          <div class="tutoriel-faq-item">
+            <h4>❓ Que faire si je n'ai plus d'Or personnel ?</h4>
+            <p><strong>→</strong> Solutions :
+              <ul>
+                <li>Augmentez votre <strong>Corruption</strong> pour gagner plus d'Or.</li>
+                <li>Utilisez des <strong>actions spéciales</strong> qui ne coûtent pas d'Or (ex: "Bénir un Décret" pour l'Aumônier).</li>
+                <li>Demandez une <strong>alliance</strong> à un autre ministre pour partager les ressources.</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== CONCLUSION ==================== -->
+      <div class="tutoriel-section" style="border-top: 1px solid var(--or); padding-top: 1rem;">
+        <h3>🎉 Conclusion</h3>
+        <p>
+          Le <strong>système de valves</strong> ajoute une <strong>profondeur stratégique</strong> à 
+          <em>Intrigues & Couronnes</em> en vous permettant de <strong>choisir votre propre équilibre</strong> 
+          entre loyauté, efficacité et corruption.
+        </p>
+        <p><strong>Conseils finaux :</strong></p>
+        <ul>
+          <li>✅ <strong>Testez différentes stratégies</strong> pour trouver celle qui vous convient.</li>
+          <li>✅ <strong>Adaptez-vous</strong> en fonction de la situation (Stabilité, Or public, Réputation).</li>
+          <li>✅ <strong>Coopérez avec les autres ministres</strong> pour éviter la ruine collective.</li>
+          <li>✅ <strong>Surveillez votre Réputation</strong> : une mauvaise réputation peut vous coûter cher.</li>
+        </ul>
+        <p style="text-align: center; margin-top: 1rem; font-style: italic;">
+          <strong>Bonne partie, et que les intrigues commencent !</strong> 🎲👑
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     CSS POUR LE TUTORIEL (À AJOUTER DANS <style> OU DANS base.html)
+     ========================================================================== -->
+
+<style>
+  /* Style pour la modale du tutoriel */
+  .boite-modale-large {
+    max-width: 90%;
+    max-height: 90vh;
+    width: 800px;
+  }
+  
+  .tutoriel-contenu {
+    padding: 0 1rem;
+  }
+  
+  .tutoriel-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(184, 134, 46, 0.2);
+  }
+  
+  .tutoriel-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .tutoriel-sous-section {
+    margin: 1rem 0;
+    padding: 0.8rem;
+    background: rgba(240, 230, 210, 0.1);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--or);
+  }
+  
+  .tutoriel-tableau {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .tutoriel-tableau th,
+  .tutoriel-tableau td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(184, 134, 46, 0.2);
+  }
+  
+  .tutoriel-tableau th {
+    background: rgba(184, 134, 46, 0.1);
+    font-weight: bold;
+  }
+  
+  .tutoriel-tableau tr:hover {
+    background: rgba(184, 134, 46, 0.05);
+  }
+  
+  .tutoriel-exemple {
+    background: rgba(240, 230, 210, 0.2);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+  
+  .valves-exemple {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .valve {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .valve-bar {
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .valve-fill {
+    height: 100%;
+    background: var(--bleu-roi);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
+  
+  .encart-avertissement {
+    background: rgba(156, 46, 60, 0.1);
+    border-left: 3px solid var(--rouge);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius);
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .tutoriel-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .tutoriel-faq-item {
+    background: rgba(240, 230, 210, 0.1);
+    padding: 0.8rem;
+    border-radius: var(--radius);
+    border-left: 3px solid var(--or);
+  }
+  
+  .tutoriel-faq-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--or);
+  }
+  
+  .tutoriel-faq-item p {
+    margin: 0.3rem 0 0 0;
+  }
+  
+  /* Style pour les curseurs de valves */
+  .valves-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+  
+  .valve {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .valve label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+  
+  .valve-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .valve-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--or);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .valve-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--or);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .valve-total {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--or);
+    font-weight: bold;
+  }
+  
+  .reputation-bar {
+    margin: 0.8rem 0;
+  }
+  
+  .reputation-bar .bar-container {
+    height: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 7px;
+    overflow: hidden;
+    margin-top: 0.3rem;
+  }
+  
+  .reputation-bar .bar {
+    height: 100%;
+    background: linear-gradient(to right, #ff0000, #ffff00, #00ff00);
+    border-radius: 7px;
+    transition: width 0.3s ease;
+  }
+  
+  .actions-speciales {
+    margin: 1rem 0;
+  }
+  
+  .actions-speciales h3 {
+    margin-bottom: 0.5rem;
+    color: var(--or);
+  }
+  
+  .action-button {
+    display: block;
+    width: 100%;
+    margin: 0.3rem 0;
+    padding: 0.5rem;
+    background: rgba(184, 134, 46, 0.2);
+    border: 1px solid var(--or);
+    color: var(--or);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+  
+  .action-button:hover {
+    background: rgba(184, 134, 46, 0.4);
+  }
+  
+  .action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .dettes {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--or-clair);
+  }
+</style>
+
+<!-- ==========================================================================
+     JAVASCRIPT POUR LE TUTORIEL (À AJOUTER À LA FIN DE room.html)
+     ========================================================================== -->
+
+<script>
+  // Fonction pour ouvrir/fermer les modales
+  function ouvrirModale(id) {
+    const modale = document.getElementById(id);
+    if (modale) {
+      modale.classList.remove('cachee');
+    }
+  }
+  
+  function fermerModale(id) {
+    const modale = document.getElementById(id);
+    if (modale) {
+      modale.classList.add('cachee');
+    }
+  }
+  
+  // Fonction pour gérer les curseurs de valves (somme = 100%)
+  function initValvesSliders() {
+    const sliders = document.querySelectorAll('.valve-slider');
+    if (sliders.length === 0) return;
+    
+    const updateValves = () => {
+      let total = 0;
+      sliders.forEach(slider => {
+        total += parseInt(slider.value, 10);
+      });
+      
+      // Si la somme dépasse 100, ajuster proportionnellement
+      if (total > 100) {
+        const ratio = 100 / total;
+        sliders.forEach(slider => {
+          slider.value = Math.round(parseInt(slider.value, 10) * ratio);
+        });
+      }
+      
+      // Mettre à jour l'affichage des valeurs
+      sliders.forEach(slider => {
+        const valveId = slider.dataset.valve;
+        const valueSpan = document.getElementById(`${valveId}-value`);
+        if (valueSpan) {
+          valueSpan.textContent = `${slider.value}%`;
+        }
+      });
+      
+      // Mettre à jour le total
+      const totalSpan = document.getElementById('valve-total');
+      if (totalSpan) {
+        let newTotal = 0;
+        sliders.forEach(slider => {
+          newTotal += parseInt(slider.value, 10);
+        });
+        totalSpan.textContent = `${newTotal}%`;
+      }
+    };
+    
+    // Ajouter les écouteurs d'événements
+    sliders.forEach(slider => {
+      slider.addEventListener('input', updateValves);
+    });
+    
+    // Initialiser
+    updateValves();
+  }
+  
+  // Appeler au chargement de la page
+  document.addEventListener('DOMContentLoaded', initValvesSliders);
+  
+  // Fonction pour valider les valves
+  function validerValves() {
+    const sliders = document.querySelectorAll('.valve-slider');
+    const valves = {};
+    sliders.forEach(slider => {
+      const valveId = slider.dataset.valve;
+      valves[valveId] = parseInt(slider.value, 10);
+    });
+    
+    // Envoyer au serveur
+    socket.emit('submit_valves', valves);
+    
+    // Fermer la modale ou masquer le panneau
+    fermerModale('modale-valves');
+  }
+  
+  // Fonction pour ouvrir la modale du tutoriel
+  function ouvrirTutoriel() {
+    ouvrirModale('modale-tutoriel');
+  }
+</script>
+
+<!-- ==========================================================================
+     BOUTON POUR OUVRIR LE TUTORIEL (À AJOUTER DANS L'ENTÊTE)
+     ========================================================================== -->
+
+<!-- Ajouter ce bouton dans l'entête, à côté du timer -->
+<button 
+  onclick="ouvrirTutoriel()" 
+  class="btn btn-fantome" 
+  style="
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    z-index: 1000;
+  " 
+  title="Ouvrir le tutoriel"
+>
+  ❓ Aide
+</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
