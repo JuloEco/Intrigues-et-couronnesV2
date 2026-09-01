@@ -4,3 +4,4 @@ gevent
 gevent-websocket
 python-dotenv
 psycopg2-binary
+gunicorn
