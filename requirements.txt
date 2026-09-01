@@ -3,5 +3,6 @@ Flask-SocketIO
 gevent
 gevent-websocket
 gunicorn
+packaging
 python-dotenv
 psycopg2-binary
