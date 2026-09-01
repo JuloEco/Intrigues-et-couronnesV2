@@ -5,7 +5,7 @@ Version complète avec tous les pouvoirs spéciaux, audiences royales et chats p
 
 from __future__ import annotations
 
-import gevent import monkey
+from gevent import monkey
 monkey.patch_all()
 
 import os
