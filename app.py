@@ -47,7 +47,10 @@ _USE_POSTGRES = bool(os.environ.get("DATABASE_URL"))
 _db_lock = threading.Lock()
 
 if _USE_POSTGRES:
-    import psycopg2
+    try:
+        import psycopg2
+    except ImportError:
+        import psycopg2_binary as psycopg2
 
 SQLITE_PATH = os.environ.get("SQLITE_PATH", os.path.join(os.path.dirname(__file__), "game.db"))
 
